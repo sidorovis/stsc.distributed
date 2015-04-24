@@ -15,10 +15,9 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import stsc.common.algorithms.BadAlgorithmException;
-import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.MetricsWritable;
+import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
-import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
 // @formatter:off
