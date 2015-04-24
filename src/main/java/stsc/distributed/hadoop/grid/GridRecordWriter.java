@@ -14,11 +14,11 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
-import stsc.distributed.hadoop.types.StatisticsWritable;
+import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.strategy.TradingStrategy;
 
-public class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, StatisticsWritable> {
+public class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, MetricsWritable> {
 
 	private final StockStorage stockStorage;
 	private final List<TradingStrategy> tradingStrategies = Collections.synchronizedList(new ArrayList<TradingStrategy>());
@@ -29,9 +29,9 @@ public class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, St
 	}
 
 	@Override
-	public void write(SimulatorSettingsWritable key, StatisticsWritable value) throws IOException, InterruptedException {
+	public void write(SimulatorSettingsWritable key, MetricsWritable value) throws IOException, InterruptedException {
 		try {
-			tradingStrategies.add(new TradingStrategy(key.getSimulatorSettings(stockStorage), value.getStatistics()));
+			tradingStrategies.add(new TradingStrategy(key.getSimulatorSettings(stockStorage), value.getMetrics()));
 		} catch (BadAlgorithmException e) {
 			throw new IOException(e.getMessage());
 		}

@@ -16,17 +16,19 @@ import org.apache.hadoop.util.ToolRunner;
 
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
-import stsc.distributed.hadoop.types.StatisticsWritable;
+import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
+import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
-//@formatter:off
+// @formatter:off
 /**
- * 1) Copy Datafeed from local to hdfs (<local>/"./test_data/" -> <hdfs>/"./yahoo_datafeed/");
- * 2) Start separated tasks.
- * 3) Load results from Hdfs.
+ * 1) Copy Datafeed from local to hdfs (<local>/"./test_data/" -> <hdfs>/"./yahoo_datafeed/"); 
+ * 2) Start separated tasks. 3) 
+ * Load results from
+ * Hdfs.
  */
-//@formatter:on
+// @formatter:on
 
 public class GridHadoopStarter extends Configured implements Tool, HadoopStarter {
 
@@ -57,7 +59,7 @@ public class GridHadoopStarter extends Configured implements Tool, HadoopStarter
 		job.setMapOutputValueClass(TradingStrategyWritable.class);
 
 		job.setOutputKeyClass(SimulatorSettingsWritable.class);
-		job.setOutputValueClass(StatisticsWritable.class);
+		job.setOutputValueClass(MetricsWritable.class);
 
 		job.setInputFormatClass(GridInputFormat.class);
 		job.setOutputFormatClass(GridOutputFormat.class);

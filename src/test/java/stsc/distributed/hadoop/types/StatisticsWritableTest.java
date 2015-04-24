@@ -10,36 +10,37 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import stsc.common.Settings;
-import stsc.general.statistic.Statistics;
+import stsc.general.statistic.Metrics;
 
 public class StatisticsWritableTest {
-	
+
 	@Test
 	public void testStatisticsWritable() throws IOException {
-		final Map<String, Double> list = new HashMap<>();
-		list.put("getAvGain", 10.45);
-		list.put("getAvWinAvLoss", 62.13);
-		list.put("getPeriod", 16.0);
-		final Statistics s = new Statistics(list);
-		Assert.assertEquals(10.45, s.getAvGain(), Settings.doubleEpsilon);
-		Assert.assertEquals(62.13, s.getAvWinAvLoss(), Settings.doubleEpsilon);
-		Assert.assertEquals(16, s.getPeriod(), Settings.doubleEpsilon);
+		final Map<String, Double> doubleList = new HashMap<>();
+		doubleList.put("avGain", 10.45);
+		doubleList.put("avWinAvLoss", 62.13);
+		final Map<String, Integer> integerList = new HashMap<>();
+		integerList.put("period", 16);
+		final Metrics s = new Metrics(doubleList, integerList);
+		Assert.assertEquals(10.45, s.getMetric("avGain"), Settings.doubleEpsilon);
+		Assert.assertEquals(62.13, s.getMetric("avWinAvLoss"), Settings.doubleEpsilon);
+		Assert.assertEquals(16, s.getIntegerMetric("period").intValue());
 
 		final DataOutputByteBuffer output = new DataOutputByteBuffer();
 		final DataInputByteBuffer input = new DataInputByteBuffer();
 
-		final StatisticsWritable sw = new StatisticsWritable(s);
+		final MetricsWritable sw = new MetricsWritable(s);
 
 		sw.write(output);
 		input.reset(output.getData());
 
-		final StatisticsWritable swCopy = new StatisticsWritable();
+		final MetricsWritable swCopy = new MetricsWritable();
 		swCopy.readFields(input);
 
-		final Statistics sCopy = swCopy.getStatistics();
+		final Metrics sCopy = swCopy.getMetrics();
 
-		Assert.assertEquals(10.45, sCopy.getAvGain(), Settings.doubleEpsilon);
-		Assert.assertEquals(62.13, sCopy.getAvWinAvLoss(), Settings.doubleEpsilon);
-		Assert.assertEquals(16, sCopy.getPeriod(), Settings.doubleEpsilon);
+		Assert.assertEquals(10.45, sCopy.getMetric("avGain"), Settings.doubleEpsilon);
+		Assert.assertEquals(62.13, sCopy.getMetric("avWinAvLoss"), Settings.doubleEpsilon);
+		Assert.assertEquals(16, sCopy.getIntegerMetric("period").intValue());
 	}
 }

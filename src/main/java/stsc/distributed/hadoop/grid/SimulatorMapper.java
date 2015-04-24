@@ -13,7 +13,7 @@ import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.simulator.Simulator;
 import stsc.general.simulator.SimulatorSettings;
-import stsc.general.statistic.Statistics;
+import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
 public class SimulatorMapper extends Mapper<LongWritable, SimulatorSettingsWritable, LongWritable, TradingStrategyWritable> {
@@ -37,8 +37,8 @@ public class SimulatorMapper extends Mapper<LongWritable, SimulatorSettingsWrita
 		try {
 			final SimulatorSettings settings = value.getSimulatorSettings(stockStorage);
 			final Simulator simulator = new Simulator(settings);
-			final Statistics statistics = simulator.getStatistics();
-			final TradingStrategy tradingStrategy = new TradingStrategy(settings, statistics);
+			final Metrics metrics = simulator.getMetrics();
+			final TradingStrategy tradingStrategy = new TradingStrategy(settings, metrics);
 			context.write(zero, new TradingStrategyWritable(tradingStrategy));
 		} catch (BadAlgorithmException | BadSignalException e) {
 			throw new IOException(e.getMessage());

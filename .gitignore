@@ -19,3 +19,7 @@ yahoo_datafeed/*
 test_data/.*
 test_data/_SUCCESS
 target
+
+.project
+.settings
+.classpath

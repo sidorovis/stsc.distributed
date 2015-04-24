@@ -8,12 +8,12 @@ import org.apache.hadoop.mapreduce.Reducer;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
-import stsc.distributed.hadoop.types.StatisticsWritable;
+import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.statistic.StrategySelector;
 import stsc.general.strategy.TradingStrategy;
 
-public class SimulatorReducer extends Reducer<LongWritable, TradingStrategyWritable, SimulatorSettingsWritable, StatisticsWritable> {
+public class SimulatorReducer extends Reducer<LongWritable, TradingStrategyWritable, SimulatorSettingsWritable, MetricsWritable> {
 
 	private StockStorage stockStorage;
 
@@ -37,7 +37,7 @@ public class SimulatorReducer extends Reducer<LongWritable, TradingStrategyWrita
 			}
 			for (TradingStrategy ts : ss.getStrategies()) {
 				final SimulatorSettingsWritable ssw = new SimulatorSettingsWritable(ts.getSettings());
-				final StatisticsWritable sw = new StatisticsWritable(ts.getStatistics());
+				final MetricsWritable sw = new MetricsWritable(ts.getMetrics());
 				context.write(ssw, sw);
 			}
 		} catch (BadAlgorithmException e) {

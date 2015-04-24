@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Writable;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
-import stsc.general.statistic.Statistics;
+import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
 public class TradingStrategyWritable implements Writable {
@@ -17,7 +17,7 @@ public class TradingStrategyWritable implements Writable {
 	private TradingStrategy tradingStrategy;
 
 	private SimulatorSettingsWritable ssw;
-	private StatisticsWritable sw;
+	private MetricsWritable sw;
 
 	public TradingStrategyWritable(TradingStrategy ts) {
 		this.tradingStrategy = ts;
@@ -32,10 +32,10 @@ public class TradingStrategyWritable implements Writable {
 	@Override
 	public void write(DataOutput out) throws IOException {
 		final SimulatorSettings settings = tradingStrategy.getSettings();
-		final Statistics statistics = tradingStrategy.getStatistics();
+		final Metrics metrics = tradingStrategy.getMetrics();
 		final SimulatorSettingsWritable ssw = new SimulatorSettingsWritable(settings);
 		ssw.write(out);
-		final StatisticsWritable sw = new StatisticsWritable(statistics);
+		final MetricsWritable sw = new MetricsWritable(metrics);
 		sw.write(out);
 	}
 
@@ -43,11 +43,11 @@ public class TradingStrategyWritable implements Writable {
 	public void readFields(DataInput in) throws IOException {
 		ssw = new SimulatorSettingsWritable();
 		ssw.readFields(in);
-		sw = new StatisticsWritable();
+		sw = new MetricsWritable();
 		sw.readFields(in);
 	}
 
 	public TradingStrategy getTradingStrategy(final StockStorage stockStorage) throws BadAlgorithmException {
-		return new TradingStrategy(ssw.getSimulatorSettings(stockStorage), sw.getStatistics());
+		return new TradingStrategy(ssw.getSimulatorSettings(stockStorage), sw.getMetrics());
 	}
 }

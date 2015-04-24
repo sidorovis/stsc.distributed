@@ -82,10 +82,10 @@ public class HadoopSettings {
 
 	private CostFunction generateDefaultCostFunction() {
 		final CostWeightedProductFunction cf = new CostWeightedProductFunction();
-		cf.addParameter("getWinProb", 2.5);
-		cf.addParameter("getAvLoss", -1.0);
-		cf.addParameter("getAvWin", 1.0);
-		cf.addParameter("getStartMonthAvGain", 1.2);
+		cf.addParameter("winProb", 2.5);
+		cf.addParameter("avLoss", -1.0);
+		cf.addParameter("avWin", 1.0);
+		cf.addParameter("startMonthAvGain", 1.2);
 		cf.addParameter("ddDurationAvGain", -1.2);
 		cf.addParameter("ddValueAvGain", -1.2);
 		return cf;

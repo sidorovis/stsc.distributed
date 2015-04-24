@@ -11,12 +11,12 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
-import stsc.distributed.hadoop.types.StatisticsWritable;
+import stsc.distributed.hadoop.types.MetricsWritable;
 
-public class GridOutputFormat extends OutputFormat<SimulatorSettingsWritable, StatisticsWritable> {
+public class GridOutputFormat extends OutputFormat<SimulatorSettingsWritable, MetricsWritable> {
 
 	@Override
-	public RecordWriter<SimulatorSettingsWritable, StatisticsWritable> getRecordWriter(TaskAttemptContext context) throws IOException,
+	public RecordWriter<SimulatorSettingsWritable, MetricsWritable> getRecordWriter(TaskAttemptContext context) throws IOException,
 			InterruptedException {
 		final FileSystem hdfs = FileSystem.get(context.getConfiguration());
 		return new GridRecordWriter(hdfs, HadoopSettings.getInstance().getHdfsOutputPath());
