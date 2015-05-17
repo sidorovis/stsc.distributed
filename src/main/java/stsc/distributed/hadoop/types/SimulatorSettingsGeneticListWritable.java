@@ -11,9 +11,10 @@ import stsc.general.simulator.multistarter.AlgorithmParameters;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
-import stsc.general.simulator.multistarter.MpIterator;
+import stsc.general.simulator.multistarter.MpNumberIterator;
 import stsc.general.simulator.multistarter.MpString;
 import stsc.general.simulator.multistarter.MpSubExecution;
+import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
@@ -99,27 +100,27 @@ public class SimulatorSettingsGeneticListWritable extends MapEasyWritable {
 		saveSubExecutions(execPrefix, parameters.getSubExecutions());
 	}
 
-	private void saveIntegers(String execPrefix, ParameterList<Integer> params) {
+	private void saveIntegers(String execPrefix, ParameterList<Integer, MpNumberIterator<Integer>> params) {
 		saveNumberType(execPrefix, params, integers, INTEGERS_SIZE, INTEGER_NAME);
 	}
 
-	private void saveDoubles(String execPrefix, ParameterList<Double> params) {
+	private void saveDoubles(String execPrefix, ParameterList<Double, MpNumberIterator<Double>> params) {
 		saveNumberType(execPrefix, params, doubles, DOUBLES_SIZE, DOUBLE_NAME);
 	}
 
-	private void saveStrings(String execPrefix, ParameterList<String> params) {
+	private void saveStrings(String execPrefix, ParameterList<String, MpTextIterator<String>> params) {
 		saveTextType(execPrefix, params, strings, STRINGS_SIZE, STRING_NAME);
 	}
 
-	private void saveSubExecutions(String execPrefix, ParameterList<String> params) {
+	private void saveSubExecutions(String execPrefix, ParameterList<String, MpTextIterator<String>> params) {
 		saveTextType(execPrefix, params, strings, SUB_EXECUTIONS_SIZE, SUB_EXECUTION_NAME);
 	}
 
-	private <T> void saveNumberType(String execPrefix, ParameterList<T> params, Map<String, T> to, String sizePostfix, String namePostfix) {
-		final List<MpIterator<T>> p = params.getParams();
+	private <T> void saveNumberType(String execPrefix, ParameterList<T, MpNumberIterator<T>> params, Map<String, T> to, String sizePostfix, String namePostfix) {
+		final List<MpNumberIterator<T>> p = params.getParams();
 		integers.put(execPrefix + sizePostfix, p.size());
 		int index = 0;
-		for (MpIterator<T> mp : p) {
+		for (MpNumberIterator<T> mp : p) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);
 			strings.put(prefix, mp.getName());
 			to.put(prefix + ".from", mp.getFrom());
@@ -129,11 +130,12 @@ public class SimulatorSettingsGeneticListWritable extends MapEasyWritable {
 		}
 	}
 
-	private void saveTextType(String execPrefix, ParameterList<String> params, Map<String, String> to, String sizePostfix, String namePostfix) {
-		final List<MpIterator<String>> p = params.getParams();
+	private void saveTextType(String execPrefix, ParameterList<String, MpTextIterator<String>> params, Map<String, String> to, String sizePostfix,
+			String namePostfix) {
+		final List<MpTextIterator<String>> p = params.getParams();
 		integers.put(execPrefix + sizePostfix, p.size());
 		int index = 0;
-		for (MpIterator<String> mp : p) {
+		for (MpTextIterator<String> mp : p) {
 			final String prefix = execPrefix + namePostfix + "." + String.valueOf(index);
 			strings.put(prefix, mp.getName());
 			integers.put(prefix, mp.getDomen().size());

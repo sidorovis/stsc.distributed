@@ -11,9 +11,10 @@ import stsc.general.simulator.multistarter.AlgorithmParameters;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
-import stsc.general.simulator.multistarter.MpIterator;
+import stsc.general.simulator.multistarter.MpNumberIterator;
 import stsc.general.simulator.multistarter.MpString;
 import stsc.general.simulator.multistarter.MpSubExecution;
+import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.grid.AlgorithmSettingsGridIterator;
 import stsc.general.simulator.multistarter.grid.GridExecutionInitializer;
@@ -72,16 +73,16 @@ public class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		saveSubExecutions(prefix + ".subexec.", parameters.getSubExecutions(), strings);
 	}
 
-	private void saveIntegers(String prefix, ParameterList<Integer> from, Map<String, Integer> to) {
+	private void saveIntegers(String prefix, ParameterList<Integer, MpNumberIterator<Integer>> from, Map<String, Integer> to) {
 		saveNumbers(prefix, from, to);
 	}
 
-	private void saveDoubles(String prefix, ParameterList<Double> from, Map<String, Double> to) {
+	private void saveDoubles(String prefix, ParameterList<Double, MpNumberIterator<Double>> from, Map<String, Double> to) {
 		saveNumbers(prefix, from, to);
 	}
 
-	private <T> void saveNumbers(String prefix, ParameterList<T> from, Map<String, T> to) {
-		final List<MpIterator<T>> params = from.getParams();
+	private <T> void saveNumbers(String prefix, ParameterList<T, MpNumberIterator<T>> from, Map<String, T> to) {
+		final List<MpNumberIterator<T>> params = from.getParams();
 		integers.put(prefix + "size", params.size());
 		for (int i = 0; i < params.size(); ++i) {
 			final String indexPrefix = prefix + String.valueOf(i);
@@ -92,19 +93,19 @@ public class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		}
 	}
 
-	private void saveStrings(String prefix, ParameterList<String> from, Map<String, String> to) {
+	private void saveStrings(String prefix, ParameterList<String, MpTextIterator<String>> from, Map<String, String> to) {
 		saveText(prefix, from, to);
 	}
 
-	private void saveSubExecutions(String prefix, ParameterList<String> from, Map<String, String> to) {
+	private void saveSubExecutions(String prefix, ParameterList<String, MpTextIterator<String>> from, Map<String, String> to) {
 		saveText(prefix, from, to);
 	}
 
-	private <T> void saveText(String prefix, ParameterList<T> from, Map<String, T> to) {
-		final List<MpIterator<T>> params = from.getParams();
+	private <T> void saveText(String prefix, ParameterList<T, MpTextIterator<T>> from, Map<String, T> to) {
+		final List<MpTextIterator<T>> params = from.getParams();
 		integers.put(prefix + "size", params.size());
 		for (int i = 0; i < params.size(); ++i) {
-			final MpIterator<T> iter = params.get(i);
+			final MpTextIterator<T> iter = params.get(i);
 			final List<T> domen = iter.getDomen();
 			final String dp = prefix + String.valueOf(i) + ".";
 			strings.put(dp + "name", iter.getName());
