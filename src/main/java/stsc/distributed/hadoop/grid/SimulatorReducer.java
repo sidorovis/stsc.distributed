@@ -5,13 +5,14 @@ import java.io.IOException;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
+
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
-import stsc.general.statistic.StrategySelector;
 import stsc.general.strategy.TradingStrategy;
+import stsc.general.strategy.selector.StrategySelector;
 
 public class SimulatorReducer extends Reducer<LongWritable, TradingStrategyWritable, SimulatorSettingsWritable, MetricsWritable> {
 

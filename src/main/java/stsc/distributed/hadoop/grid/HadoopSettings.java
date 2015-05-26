@@ -26,10 +26,10 @@ import stsc.general.simulator.multistarter.MpInteger;
 import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
-import stsc.general.statistic.StatisticsByCostSelector;
-import stsc.general.statistic.StrategySelector;
 import stsc.general.statistic.cost.function.CostFunction;
 import stsc.general.statistic.cost.function.CostWeightedProductFunction;
+import stsc.general.strategy.selector.StatisticsByCostSelector;
+import stsc.general.strategy.selector.StrategySelector;
 import stsc.storage.AlgorithmsStorage;
 import stsc.storage.ThreadSafeStockStorage;
 

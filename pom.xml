@@ -130,6 +130,11 @@
   <dependencies>
     <dependency>
       <groupId>stsc</groupId>
+      <artifactId>stsc.general</artifactId>
+      <version>0.0.18-WEBINTERFACE</version>
+    </dependency>
+    <dependency>
+      <groupId>stsc</groupId>
       <artifactId>stsc.stocks.yahoo.core</artifactId>
       <version>${project.version}</version>
     </dependency>
