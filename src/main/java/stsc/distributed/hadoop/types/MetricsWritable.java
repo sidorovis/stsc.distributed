@@ -3,6 +3,7 @@ package stsc.distributed.hadoop.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 
 public class MetricsWritable extends MapEasyWritable {
@@ -20,17 +21,17 @@ public class MetricsWritable extends MapEasyWritable {
 	private void saveStatistics(final Metrics metrics) {
 		integers.put(DOUBLE_SIZE, metrics.getDoubleMetrics().size());
 		int index = 0;
-		for (Map.Entry<String, Double> e : metrics.getDoubleMetrics().entrySet()) {
+		for (Map.Entry<MetricType, Double> e : metrics.getDoubleMetrics().entrySet()) {
 			final String parName = generateDoubleParameterName(index);
-			strings.put(parName, e.getKey());
+			strings.put(parName, e.getKey().name());
 			doubles.put(parName, e.getValue());
 			index += 1;
 		}
 		integers.put(INTEGER_SIZE, metrics.getIntegerMetrics().size());
 		index = 0;
-		for (Map.Entry<String, Integer> e : metrics.getIntegerMetrics().entrySet()) {
+		for (Map.Entry<MetricType, Integer> e : metrics.getIntegerMetrics().entrySet()) {
 			final String parName = generateIntegerParameterName(index);
-			strings.put(parName, e.getKey());
+			strings.put(parName, e.getKey().name());
 			integers.put(parName, e.getValue());
 			index += 1;
 		}
@@ -42,16 +43,16 @@ public class MetricsWritable extends MapEasyWritable {
 
 	private Metrics loadStatistics() {
 		final int sizeDouble = integers.get(DOUBLE_SIZE);
-		final Map<String, Double> doubleValues = new HashMap<>();
+		final Map<MetricType, Double> doubleValues = new HashMap<>();
 		for (int i = 0; i < sizeDouble; ++i) {
 			final String parName = generateDoubleParameterName(i);
-			doubleValues.put(strings.get(parName), doubles.get(parName));
+			doubleValues.put(MetricType.valueOf(strings.get(parName)), doubles.get(parName));
 		}
 		final int sizeInteger = integers.get(INTEGER_SIZE);
-		final Map<String, Integer> integerValues = new HashMap<>();
+		final Map<MetricType, Integer> integerValues = new HashMap<>();
 		for (int i = 0; i < sizeInteger; ++i) {
 			final String parName = generateIntegerParameterName(i);
-			integerValues.put(strings.get(parName), integers.get(parName));
+			integerValues.put(MetricType.valueOf(strings.get(parName)), integers.get(parName));
 		}
 		return new Metrics(doubleValues, integerValues);
 	}

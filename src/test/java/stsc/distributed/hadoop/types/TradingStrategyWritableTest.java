@@ -13,6 +13,7 @@ import stsc.common.Settings;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
@@ -26,11 +27,11 @@ public class TradingStrategyWritableTest {
 	}
 
 	private Metrics getMetrics() {
-		final Map<String, Double> listDouble = new HashMap<>();
-		listDouble.put("avGain", 10.45);
-		listDouble.put("avWinAvLoss", 62.13);
-		final Map<String, Integer> listInteger = new HashMap<>();
-		listInteger.put("period", 16);
+		final Map<MetricType, Double> listDouble = new HashMap<>();
+		listDouble.put(MetricType.avGain, 10.45);
+		listDouble.put(MetricType.avWinAvLoss, 62.13);
+		final Map<MetricType, Integer> listInteger = new HashMap<>();
+		listInteger.put(MetricType.period, 16);
 		return new Metrics(listDouble, listInteger);
 	}
 
@@ -52,6 +53,6 @@ public class TradingStrategyWritableTest {
 		final TradingStrategy tsCopy = tswCopy.getTradingStrategy(StockStorageMock.getStockStorage());
 		Assert.assertEquals(ts.getAvGain(), tsCopy.getAvGain(), Settings.doubleEpsilon);
 		Assert.assertEquals(ts.getSettings().stringHashCode(), tsCopy.getSettings().stringHashCode());
-		Assert.assertEquals(ts.getMetrics().getIntegerMetric("period"), tsCopy.getMetrics().getIntegerMetric("period"));
+		Assert.assertEquals(ts.getMetrics().getIntegerMetric(MetricType.period), tsCopy.getMetrics().getIntegerMetric(MetricType.period));
 	}
 }

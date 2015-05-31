@@ -10,21 +10,22 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import stsc.common.Settings;
+import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 
 public class StatisticsWritableTest {
 
 	@Test
 	public void testStatisticsWritable() throws IOException {
-		final Map<String, Double> doubleList = new HashMap<>();
-		doubleList.put("avGain", 10.45);
-		doubleList.put("avWinAvLoss", 62.13);
-		final Map<String, Integer> integerList = new HashMap<>();
-		integerList.put("period", 16);
+		final Map<MetricType, Double> doubleList = new HashMap<>();
+		doubleList.put(MetricType.avGain, 10.45);
+		doubleList.put(MetricType.avWinAvLoss, 62.13);
+		final Map<MetricType, Integer> integerList = new HashMap<>();
+		integerList.put(MetricType.period, 16);
 		final Metrics s = new Metrics(doubleList, integerList);
-		Assert.assertEquals(10.45, s.getMetric("avGain"), Settings.doubleEpsilon);
-		Assert.assertEquals(62.13, s.getMetric("avWinAvLoss"), Settings.doubleEpsilon);
-		Assert.assertEquals(16, s.getIntegerMetric("period").intValue());
+		Assert.assertEquals(10.45, s.getMetric(MetricType.avGain), Settings.doubleEpsilon);
+		Assert.assertEquals(62.13, s.getMetric(MetricType.avWinAvLoss), Settings.doubleEpsilon);
+		Assert.assertEquals(16, s.getIntegerMetric(MetricType.period).intValue());
 
 		final DataOutputByteBuffer output = new DataOutputByteBuffer();
 		final DataInputByteBuffer input = new DataInputByteBuffer();
@@ -39,8 +40,8 @@ public class StatisticsWritableTest {
 
 		final Metrics sCopy = swCopy.getMetrics();
 
-		Assert.assertEquals(10.45, sCopy.getMetric("avGain"), Settings.doubleEpsilon);
-		Assert.assertEquals(62.13, sCopy.getMetric("avWinAvLoss"), Settings.doubleEpsilon);
-		Assert.assertEquals(16, sCopy.getIntegerMetric("period").intValue());
+		Assert.assertEquals(10.45, sCopy.getMetric(MetricType.avGain), Settings.doubleEpsilon);
+		Assert.assertEquals(62.13, sCopy.getMetric(MetricType.avWinAvLoss), Settings.doubleEpsilon);
+		Assert.assertEquals(16, sCopy.getIntegerMetric(MetricType.period).intValue());
 	}
 }

@@ -26,6 +26,8 @@ import stsc.general.simulator.multistarter.MpInteger;
 import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
+import stsc.general.statistic.MetricType;
+import stsc.general.statistic.cost.comparator.MetricsDifferentComparator;
 import stsc.general.statistic.cost.function.CostFunction;
 import stsc.general.statistic.cost.function.CostWeightedProductFunction;
 import stsc.general.strategy.selector.StatisticsByCostSelector;
@@ -77,17 +79,17 @@ public class HadoopSettings {
 
 	private HadoopSettings() {
 		costFunction = generateDefaultCostFunction();
-		strategySelector = new StatisticsByCostSelector(150, costFunction);
+		strategySelector = new StatisticsByCostSelector(150, costFunction, new MetricsDifferentComparator());
 	}
 
 	private CostFunction generateDefaultCostFunction() {
 		final CostWeightedProductFunction cf = new CostWeightedProductFunction();
-		cf.addParameter("winProb", 2.5);
-		cf.addParameter("avLoss", -1.0);
-		cf.addParameter("avWin", 1.0);
-		cf.addParameter("startMonthAvGain", 1.2);
-		cf.addParameter("ddDurationAvGain", -1.2);
-		cf.addParameter("ddValueAvGain", -1.2);
+		cf.addParameter(MetricType.winProb, 2.5);
+		cf.addParameter(MetricType.avLoss, -1.0);
+		cf.addParameter(MetricType.avWin, 1.0);
+		cf.addParameter(MetricType.startMonthAvGain, 1.2);
+		cf.addParameter(MetricType.ddDurationAvGain, -1.2);
+		cf.addParameter(MetricType.ddValueAvGain, -1.2);
 		return cf;
 	}
 
@@ -155,18 +157,16 @@ public class HadoopSettings {
 		}
 	}
 
-	private static void fillFactory(FromToPeriod period, SimulatorSettingsGridFactory settings) throws BadParameterException,
-			BadAlgorithmException {
+	private static void fillFactory(FromToPeriod period, SimulatorSettingsGridFactory settings) throws BadParameterException, BadAlgorithmException {
 		settings.addStock("in", algoStockName(Input.class.getSimpleName()), "e", Arrays.asList(new String[] { "open", "close" }));
-		settings.addStock("ema", algoStockName(Ema.class.getSimpleName()),
-				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("P", 0.1, 0.6, 0.5)).add(new MpSubExecution("", "in")));
+		settings.addStock("ema", algoStockName(Ema.class.getSimpleName()), new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("P", 0.1, 0.6, 0.5))
+				.add(new MpSubExecution("", "in")));
 		settings.addStock(
 				"level",
 				algoStockName("." + Level.class.getSimpleName()),
 				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("f", 15.0, 20.0, 5)).add(
 						new MpSubExecution("", Arrays.asList(new String[] { "ema" }))));
-		settings.addEod("os", algoEodName(OneSideOpenAlgorithm.class.getSimpleName()), "side",
-				Arrays.asList(new String[] { "long", "short" }));
+		settings.addEod("os", algoEodName(OneSideOpenAlgorithm.class.getSimpleName()), "side", Arrays.asList(new String[] { "long", "short" }));
 
 		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(period);
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "in", "level" })));
