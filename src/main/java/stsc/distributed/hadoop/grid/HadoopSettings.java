@@ -11,10 +11,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
 
 import stsc.algorithms.Input;
-import stsc.algorithms.eod.primitive.OneSideOpenAlgorithm;
-import stsc.algorithms.eod.primitive.PositionNDayMStocks;
-import stsc.algorithms.stock.indices.primitive.Ema;
-import stsc.algorithms.stock.indices.primitive.Level;
+import stsc.algorithms.indices.primitive.stock.Ema;
+import stsc.algorithms.indices.primitive.stock.Level;
+import stsc.algorithms.primitive.eod.OneSideOpenAlgorithm;
+import stsc.algorithms.primitive.eod.PositionNDayMStocks;
 import stsc.common.FromToPeriod;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.stocks.UnitedFormatStock;
