@@ -4,14 +4,13 @@
 
 	<groupId>stsc</groupId>
 	<artifactId>stsc.distributed.hadoop</artifactId>
-	<version>0.0.18-WEBINTERFACE</version>
+	<version>0.0.19-BOM</version>
 	<packaging>jar</packaging>
 
 	<name>stsc.distributed.hadoop</name>
 	<url>https://github.com/sidorovis/stsc</url>
 
 	<properties>
-		<project.build.sourceEncoding>Cp1251</project.build.sourceEncoding>
 		<github.global.server>github</github.global.server>
 	</properties>
 
@@ -22,6 +21,18 @@
 			<url>file://${project.build.directory}/mvn-repo</url>
 		</repository>
 	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>stsc</groupId>
+				<artifactId>stsc.bom</artifactId>
+				<version>0.0.19-BOM</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<repositories>
 		<repository>
@@ -103,9 +114,9 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.11</version>
+				<version>0.12</version>
 				<configuration>
-					<message>Maven artifacts for ${project.version}</message>
+					<message>Deployment of new version ${project.version} stsc.distributed.hadoop</message>
 					<noJekyll>true</noJekyll>
 					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
 					<branch>refs/heads/stsc.distributed.hadoop</branch>
@@ -125,7 +136,6 @@
 				</executions>
 			</plugin>
 
-
 		</plugins>
 	</build>
 
@@ -133,33 +143,26 @@
 		<dependency>
 			<groupId>stsc</groupId>
 			<artifactId>stsc.general</artifactId>
-			<version>0.0.18-WEBINTERFACE</version>
 		</dependency>
 		<dependency>
 			<groupId>stsc</groupId>
 			<artifactId>stsc.stocks.yahoo.core</artifactId>
-			<version>0.0.18-WEBINTERFACE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-mapreduce-client-core</artifactId>
-			<version>2.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
-			<version>2.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
