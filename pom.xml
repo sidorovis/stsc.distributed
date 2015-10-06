@@ -34,38 +34,14 @@
 		</dependencies>
 	</dependencyManagement>
 
-        <repositories>
-                <repository>
-                        <id>stsc-bom-repository</id>
-                        <url>https://raw.github.com/sidorovis/stsc/stsc.bom/</url>
-                </repository>
+	<repositories>
 		<repository>
-			<id>stsc-common-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.common/</url>
+			<id>maven-central</id>
+			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
 		<repository>
-			<id>stsc-signals-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.signals/</url>
-		</repository>
-		<repository>
-			<id>stsc-algorithms-common-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.algorithms.common/</url>
-		</repository>
-		<repository>
-			<id>stsc-algorithms-equity-test-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.algorithms.equity.test/</url>
-		</repository>
-		<repository>
-			<id>stsc-storage-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.storage/</url>
-		</repository>
-		<repository>
-			<id>stsc-general-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.general/</url>
-		</repository>
-		<repository>
-			<id>stsc-stocks-yahoo-core-mvn-repo</id>
-			<url>https://raw.github.com/sidorovis/stsc/stsc.stocks.yahoo.core/</url>
+			<id>stsc-mvn-repository</id>
+			<url>https://raw.github.com/sidorovis/stsc/stsc.repository/</url>
 		</repository>
 	</repositories>
 
@@ -122,8 +98,9 @@
 				<configuration>
 					<message>Deployment of new version ${project.version} stsc.distributed.hadoop</message>
 					<noJekyll>true</noJekyll>
+					<merge>true</merge>
 					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-					<branch>refs/heads/stsc.distributed.hadoop</branch>
+					<branch>refs/heads/stsc.repository</branch>
 					<includes>
 						<include>**/*</include>
 					</includes>
