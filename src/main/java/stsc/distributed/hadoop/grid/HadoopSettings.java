@@ -35,7 +35,7 @@ import stsc.general.strategy.selector.StrategySelector;
 import stsc.storage.AlgorithmsStorage;
 import stsc.storage.ThreadSafeStockStorage;
 
-public class HadoopSettings {
+public final class HadoopSettings {
 
 	private static HadoopSettings hadoopSettings = new HadoopSettings();
 
@@ -59,6 +59,8 @@ public class HadoopSettings {
 	public String outputPathOnHdfs = "./output_data/";
 	public String outputPathOnLocal = "./";
 	public String outputFileName = "output.txt";
+
+	public String tmpFolder = "./tmp/";
 
 	public int inputSplitSize = 1;
 
@@ -98,11 +100,11 @@ public class HadoopSettings {
 	}
 
 	public Path getHdfsOutputPath() {
-		return new Path(outputPathOnHdfs + outputFileName);
+		return new Path(outputPathOnHdfs, outputFileName);
 	}
 
 	public Path getLocalOutputPath() {
-		return new Path(outputPathOnLocal + outputFileName);
+		return new Path(outputPathOnLocal, outputFileName);
 	}
 
 	public static HadoopSettings getInstance() {
@@ -159,13 +161,10 @@ public class HadoopSettings {
 
 	private static void fillFactory(FromToPeriod period, SimulatorSettingsGridFactory settings) throws BadParameterException, BadAlgorithmException {
 		settings.addStock("in", algoStockName(Input.class.getSimpleName()), "e", Arrays.asList(new String[] { "open", "close" }));
-		settings.addStock("ema", algoStockName(Ema.class.getSimpleName()), new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("P", 0.1, 0.6, 0.5))
-				.add(new MpSubExecution("", "in")));
-		settings.addStock(
-				"level",
-				algoStockName("." + Level.class.getSimpleName()),
-				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("f", 15.0, 20.0, 5)).add(
-						new MpSubExecution("", Arrays.asList(new String[] { "ema" }))));
+		settings.addStock("ema", algoStockName(Ema.class.getSimpleName()),
+				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("P", 0.1, 0.6, 0.5)).add(new MpSubExecution("", "in")));
+		settings.addStock("level", algoStockName("." + Level.class.getSimpleName()),
+				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("f", 15.0, 20.0, 5)).add(new MpSubExecution("", Arrays.asList(new String[] { "ema" }))));
 		settings.addEod("os", algoEodName(OneSideOpenAlgorithm.class.getSimpleName()), "side", Arrays.asList(new String[] { "long", "short" }));
 
 		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(period);

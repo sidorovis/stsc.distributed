@@ -11,6 +11,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.MRConfig;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -20,18 +21,20 @@ import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.strategy.TradingStrategy;
 
-// @formatter:off
 /**
- * 1) Copy Datafeed from local to hdfs (<local>/"./test_data/" -> <hdfs>/"./yahoo_datafeed/"); 
- * 2) Start separated tasks. 3) 
- * Load results from
- * Hdfs.
+ * 1) Copy Datafeed from local to hdfs (<local>/"./test_data/" ->
+ * <hdfs>/"./yahoo_datafeed/"); <br/>
+ * 2) Start separated tasks. 3) Load results from Hdfs.
  */
-// @formatter:on
 
-public class GridHadoopStarter extends Configured implements Tool, HadoopStarter {
+public final class GridHadoopStarter extends Configured implements Tool, HadoopStarter {
 
 	private final List<TradingStrategy> tradingStrategies = new ArrayList<TradingStrategy>();
+	private final HadoopSettings hs;
+
+	public GridHadoopStarter(final HadoopSettings hs) {
+		this.hs = hs;
+	}
 
 	@Override
 	public List<TradingStrategy> searchOnHadoop() throws Exception {
@@ -42,8 +45,8 @@ public class GridHadoopStarter extends Configured implements Tool, HadoopStarter
 
 	@Override
 	public int run(String[] args) throws Exception {
+		this.getConf().set(MRConfig.LOCAL_DIR, hs.tmpFolder);
 		final Job job = Job.getInstance(this.getConf());
-		final HadoopSettings hs = HadoopSettings.getInstance();
 		if (hs.copyOriginalDatafeedPath) {
 			checkAndCopyDatafeed(hs.originalDatafeedPath, hs.getHadoopDatafeedHdfsPath());
 		}
