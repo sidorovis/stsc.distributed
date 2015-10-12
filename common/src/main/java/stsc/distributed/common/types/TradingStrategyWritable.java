@@ -12,7 +12,7 @@ import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
 /**
- * This is implementation for {@link Writable} of {@link TradingStrategy}.
+ * This is implementation for {@link Externalizable} of {@link TradingStrategy}.
  */
 public final class TradingStrategyWritable implements Externalizable {
 

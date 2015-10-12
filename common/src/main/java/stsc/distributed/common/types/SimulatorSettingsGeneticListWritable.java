@@ -1,5 +1,6 @@
 package stsc.distributed.common.types;
 
+import java.io.Externalizable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 
 /**
- * This is implementation for {@link Writable} of
+ * This is implementation for {@link Externalizable} of
  * {@link SimulatorSettingsGeneticList}.
  */
 public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable {
@@ -120,7 +121,8 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		saveTextType(execPrefix, params, strings, SUB_EXECUTIONS_SIZE, SUB_EXECUTION_NAME);
 	}
 
-	private <T> void saveNumberType(String execPrefix, ParameterList<T, MpNumberIterator<T>> params, Map<String, T> to, String sizePostfix, String namePostfix) {
+	private <T> void saveNumberType(String execPrefix, ParameterList<T, MpNumberIterator<T>> params, Map<String, T> to, String sizePostfix,
+			String namePostfix) {
 		final List<MpNumberIterator<T>> p = params.getParams();
 		integers.put(execPrefix + sizePostfix, p.size());
 		int index = 0;
@@ -134,7 +136,8 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void saveTextType(String execPrefix, ParameterList<String, MpTextIterator<String>> params, Map<String, String> to, String sizePostfix, String namePostfix) {
+	private void saveTextType(String execPrefix, ParameterList<String, MpTextIterator<String>> params, Map<String, String> to, String sizePostfix,
+			String namePostfix) {
 		final List<MpTextIterator<String>> p = params.getParams();
 		integers.put(execPrefix + sizePostfix, p.size());
 		int index = 0;
@@ -249,7 +252,8 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void loadIntegerType(String execPrefix, AlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadIntegerType(String execPrefix, AlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix)
+			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);
@@ -263,7 +267,8 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void loadDoubleType(String execPrefix, AlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadDoubleType(String execPrefix, AlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix)
+			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);

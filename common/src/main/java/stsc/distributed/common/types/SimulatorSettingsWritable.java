@@ -17,7 +17,8 @@ import stsc.general.trading.TradeProcessorInit;
 import stsc.storage.ExecutionsStorage;
 
 /**
- * This is implementation for {@link Writable} of {@link SimulatorSettings}.
+ * This is implementation for {@link Externalizable} of
+ * {@link SimulatorSettings}.
  */
 public final class SimulatorSettingsWritable extends MapEasyWritable implements Comparable<SimulatorSettingsWritable> {
 
@@ -144,7 +145,8 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
+	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix,
+			Map<String, T> to) {
 		integers.put(algoSettingsPrefix + sizePostfix, from.size());
 		long index = 0;
 		for (Entry<String, T> i : from.entrySet()) {

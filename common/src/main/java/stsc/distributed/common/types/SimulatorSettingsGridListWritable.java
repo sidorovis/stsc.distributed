@@ -21,7 +21,7 @@ import stsc.general.simulator.multistarter.grid.GridExecutionInitializer;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 
 /**
- * This is implementation for {@link Writable} of
+ * This is implementation for {@link Externalizable} of
  * {@link SimulatorSettingsGridList}.
  */
 public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
