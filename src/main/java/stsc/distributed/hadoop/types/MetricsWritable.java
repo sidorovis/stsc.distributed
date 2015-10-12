@@ -3,10 +3,15 @@ package stsc.distributed.hadoop.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hadoop.io.Writable;
+
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 
-public class MetricsWritable extends MapEasyWritable {
+/**
+ * This is implementation for {@link Writable} of {@link Metrics}.
+ */
+public final class MetricsWritable extends MapEasyWritable {
 
 	private static String DOUBLE_SIZE = "sizeDouble";
 	private static String INTEGER_SIZE = "sizeInteger";

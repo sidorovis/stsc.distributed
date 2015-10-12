@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -14,22 +15,31 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
+import stsc.distributed.hadoop.HadoopConfigurationHeader;
+import stsc.distributed.hadoop.HadoopYahooStockStorage;
 import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.strategy.TradingStrategy;
 
-public class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, MetricsWritable> {
+/**
+ * GridRecordWriter is an implementation for {@link RecordWriter}. <br/>
+ * Pair for RecordWriter is : {@link SimulatorSettingsWritable} to
+ * {@link MetricsWritable}. <br/>
+ * This RecordWriter accumulate all trading strategies from mappers and save all
+ * of them to the HDFS (using
+ * {@link HadoopConfigurationHeader#getHdfsOutputFilePath(Configuration)}).
+ */
+public final class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, MetricsWritable> {
 
 	private final StockStorage stockStorage;
 	private final List<TradingStrategy> tradingStrategies = Collections.synchronizedList(new ArrayList<TradingStrategy>());
 
-	public GridRecordWriter(FileSystem hdfs, final Path path) throws IOException {
-		final HadoopSettings hs = HadoopSettings.getInstance();
-		this.stockStorage = hs.getStockStorage(hdfs, hs.getHadoopDatafeedHdfsPath());
+	public GridRecordWriter(Configuration configuration) throws IOException {
+		this.stockStorage = new HadoopYahooStockStorage().getStockStorage(configuration);
 	}
 
 	@Override
-	public void write(SimulatorSettingsWritable key, MetricsWritable value) throws IOException, InterruptedException {
+	public void write(final SimulatorSettingsWritable key, final MetricsWritable value) throws IOException, InterruptedException {
 		try {
 			tradingStrategies.add(new TradingStrategy(key.getSimulatorSettings(stockStorage), value.getMetrics()));
 		} catch (BadAlgorithmException e) {
@@ -38,16 +48,17 @@ public class GridRecordWriter extends RecordWriter<SimulatorSettingsWritable, Me
 	}
 
 	@Override
-	public void close(TaskAttemptContext context) throws IOException, InterruptedException {
-		final Path file = HadoopSettings.getInstance().getHdfsOutputPath();
-		final FileSystem fs = file.getFileSystem(context.getConfiguration());
-		if (fs.isDirectory(file)) {
-			fs.delete(file, true);
+	public void close(final TaskAttemptContext context) throws IOException, InterruptedException {
+		final Path hdfsOutputPath = HadoopConfigurationHeader.getHdfsOutputFilePath(context.getConfiguration());
+
+		final FileSystem fs = FileSystem.get(context.getConfiguration());
+		if (fs.isDirectory(hdfsOutputPath)) {
+			fs.delete(hdfsOutputPath, true);
 		}
-		if (fs.isFile(file)) {
-			fs.delete(file, true);
+		if (fs.isFile(hdfsOutputPath)) {
+			fs.delete(hdfsOutputPath, true);
 		}
-		final FSDataOutputStream fileOut = fs.create(file, true);
+		final FSDataOutputStream fileOut = fs.create(hdfsOutputPath, true); // overwrite
 		fileOut.writeInt(tradingStrategies.size());
 		for (TradingStrategy ts : tradingStrategies) {
 			final TradingStrategyWritable tsw = new TradingStrategyWritable(ts);

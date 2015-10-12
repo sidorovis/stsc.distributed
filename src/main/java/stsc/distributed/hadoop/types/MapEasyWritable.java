@@ -9,6 +9,11 @@ import java.util.Map.Entry;
 
 import org.apache.hadoop.io.Writable;
 
+/**
+ * Common {@link Writable} map of fields. Could be used for storing any data
+ * type with String / longs / integers / booleans / doubles field types (or
+ * integral).
+ */
 public class MapEasyWritable implements Writable {
 
 	protected final Map<String, String> strings;

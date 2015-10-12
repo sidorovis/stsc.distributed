@@ -16,6 +16,9 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import stsc.common.algorithms.BadAlgorithmException;
+import stsc.common.storage.StockStorage;
+import stsc.distributed.hadoop.HadoopConfigurationHeader;
+import stsc.distributed.hadoop.HadoopYahooStockStorage;
 import stsc.distributed.hadoop.types.MetricsWritable;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
@@ -24,16 +27,17 @@ import stsc.general.strategy.TradingStrategy;
 /**
  * 1) Copy Datafeed from local to hdfs (<local>/"./test_data/" ->
  * <hdfs>/"./yahoo_datafeed/"); <br/>
- * 2) Start separated tasks. 3) Load results from Hdfs.
+ * 2) Start separated tasks; <br/>
+ * 3) Load results from Hdfs.
  */
 
 public final class GridHadoopStarter extends Configured implements Tool, HadoopStarter {
 
+	private final HadoopStarterSettings hadoopStarterSettings;
 	private final List<TradingStrategy> tradingStrategies = new ArrayList<TradingStrategy>();
-	private final HadoopSettings hs;
 
-	public GridHadoopStarter(final HadoopSettings hs) {
-		this.hs = hs;
+	public GridHadoopStarter(final HadoopStarterSettings hadoopStarterSettings) throws IOException {
+		this.hadoopStarterSettings = hadoopStarterSettings;
 	}
 
 	@Override
@@ -45,12 +49,16 @@ public final class GridHadoopStarter extends Configured implements Tool, HadoopS
 
 	@Override
 	public int run(String[] args) throws Exception {
-		this.getConf().set(MRConfig.LOCAL_DIR, hs.tmpFolder);
+		this.getConf().set(MRConfig.LOCAL_DIR, hadoopStarterSettings.getTempLocalDir());
+		HadoopConfigurationHeader.setYahooStockStoragePath(this.getConf(), hadoopStarterSettings.getDatafeedHdfsPath());
+		HadoopConfigurationHeader.setHdfsOutputFolderPath(this.getConf(), hadoopStarterSettings.getHdfsOutputPath());
+		HadoopConfigurationHeader.setHdfsOutputFilename(this.getConf(), hadoopStarterSettings.getOutputFileName());
+
 		final Job job = Job.getInstance(this.getConf());
-		if (hs.copyOriginalDatafeedPath) {
-			checkAndCopyDatafeed(hs.originalDatafeedPath, hs.getHadoopDatafeedHdfsPath());
+
+		if (hadoopStarterSettings.isCopyOriginalDatafeedPath()) {
+			checkAndCopyDatafeed(hadoopStarterSettings.getOriginalDatafeedPath(), hadoopStarterSettings.getDatafeedHdfsPath());
 		}
-		hs.getStockStorage(FileSystem.get(this.getConf()), hs.getHadoopDatafeedHdfsPath());
 		job.setJobName(GridHadoopStarter.class.getSimpleName());
 		job.setJarByClass(GridHadoopStarter.class);
 
@@ -68,7 +76,7 @@ public final class GridHadoopStarter extends Configured implements Tool, HadoopS
 
 		job.waitForCompletion(true);
 		loadTradingStrategies();
-		if (hs.copyAnswerToLocal) {
+		if (hadoopStarterSettings.isCopyAnswerToLocal()) {
 			copyAnswerToLocal();
 		}
 		return 0;
@@ -76,35 +84,36 @@ public final class GridHadoopStarter extends Configured implements Tool, HadoopS
 
 	private void loadTradingStrategies() throws IOException, BadAlgorithmException {
 		final FileSystem hdfs = FileSystem.get(this.getConf());
-		final HadoopSettings hs = HadoopSettings.getInstance();
-		final Path out = hs.getHdfsOutputPath();
-		if (hdfs.exists(out)) {
-			final FSDataInputStream fileIn = hdfs.open(out);
+		final Path pathToOutputFile = HadoopConfigurationHeader.getHdfsOutputFilePath(this.getConf());
+		final StockStorage stockStorage = new HadoopYahooStockStorage().getStockStorage(this.getConf());
+		if (hdfs.exists(pathToOutputFile)) {
+			final FSDataInputStream fileIn = hdfs.open(pathToOutputFile);
 			final int size = fileIn.readInt();
 			for (int i = 0; i < size; ++i) {
 				final TradingStrategyWritable tsw = new TradingStrategyWritable();
 				tsw.readFields(fileIn);
-				tradingStrategies.add(tsw.getTradingStrategy(hs.getStockStorage()));
+				tradingStrategies.add(tsw.getTradingStrategy(stockStorage));
 			}
 		}
 	}
 
-	private void checkAndCopyDatafeed(String localPath, Path path) throws IOException {
+	private void checkAndCopyDatafeed(String localPath, String hdfsYahooDatafeedPath) throws IOException {
 		final FileSystem hdfs = FileSystem.get(this.getConf());
+		final Path path = new Path(hdfsYahooDatafeedPath);
 		if (!hdfs.exists(path)) {
 			hdfs.mkdirs(path);
 			File folder = new File(localPath);
 			File[] listOfFiles = folder.listFiles();
 			for (File file : listOfFiles) {
-				hdfs.copyFromLocalFile(new Path(file.getPath()), new Path(path + "/" + file.getName()));
+				hdfs.copyFromLocalFile(new Path(file.getPath()), new Path(path, file.getName()));
 			}
 		}
 	}
 
 	private void copyAnswerToLocal() throws IllegalArgumentException, IOException {
 		final FileSystem hdfs = FileSystem.get(this.getConf());
-		final Path out = HadoopSettings.getInstance().getHdfsOutputPath();
-		final Path localOut = HadoopSettings.getInstance().getLocalOutputPath();
+		final Path out = new Path(hadoopStarterSettings.getHdfsOutputPath(), hadoopStarterSettings.getOutputFileName());
+		final Path localOut = new Path(hadoopStarterSettings.getLocalOutputPath(), hadoopStarterSettings.getOutputFileName());
 		if (hdfs.exists(out)) {
 			hdfs.copyToLocalFile(true, out, localOut, true);
 		}

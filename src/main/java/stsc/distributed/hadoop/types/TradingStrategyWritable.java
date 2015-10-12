@@ -12,12 +12,15 @@ import stsc.general.simulator.SimulatorSettings;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
-public class TradingStrategyWritable implements Writable {
+/**
+ * This is implementation for {@link Writable} of {@link TradingStrategy}.
+ */
+public final class TradingStrategyWritable implements Writable {
 
 	private TradingStrategy tradingStrategy;
 
-	private SimulatorSettingsWritable ssw;
-	private MetricsWritable sw;
+	private SimulatorSettingsWritable simulatorSettingsWritable;
+	private MetricsWritable metricsWritable;
 
 	public TradingStrategyWritable(TradingStrategy ts) {
 		this.tradingStrategy = ts;
@@ -41,13 +44,13 @@ public class TradingStrategyWritable implements Writable {
 
 	@Override
 	public void readFields(DataInput in) throws IOException {
-		ssw = new SimulatorSettingsWritable();
-		ssw.readFields(in);
-		sw = new MetricsWritable();
-		sw.readFields(in);
+		simulatorSettingsWritable = new SimulatorSettingsWritable();
+		simulatorSettingsWritable.readFields(in);
+		metricsWritable = new MetricsWritable();
+		metricsWritable.readFields(in);
 	}
 
 	public TradingStrategy getTradingStrategy(final StockStorage stockStorage) throws BadAlgorithmException {
-		return new TradingStrategy(ssw.getSimulatorSettings(stockStorage), sw.getMetrics());
+		return new TradingStrategy(simulatorSettingsWritable.getSimulatorSettings(stockStorage), metricsWritable.getMetrics());
 	}
 }

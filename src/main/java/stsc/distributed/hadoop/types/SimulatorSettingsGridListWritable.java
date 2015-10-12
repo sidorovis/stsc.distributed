@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hadoop.io.Writable;
+
 import stsc.common.FromToPeriod;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.multistarter.AlgorithmParameters;
@@ -20,7 +22,11 @@ import stsc.general.simulator.multistarter.grid.AlgorithmSettingsGridIterator;
 import stsc.general.simulator.multistarter.grid.GridExecutionInitializer;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 
-public class SimulatorSettingsGridListWritable extends MapEasyWritable {
+/**
+ * This is implementation for {@link Writable} of
+ * {@link SimulatorSettingsGridList}.
+ */
+public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 
 	private static final String PERIOD_FROM = "periodFrom";
 	private static final String PERIOD_TO = "periodTo";

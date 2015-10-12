@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 import stsc.algorithms.AlgorithmSettingsImpl;
@@ -18,7 +19,10 @@ import stsc.general.simulator.SimulatorSettings;
 import stsc.general.trading.TradeProcessorInit;
 import stsc.storage.ExecutionsStorage;
 
-public class SimulatorSettingsWritable extends MapEasyWritable implements WritableComparable<SimulatorSettingsWritable> {
+/**
+ * This is implementation for {@link Writable} of {@link SimulatorSettings}.
+ */
+public final class SimulatorSettingsWritable extends MapEasyWritable implements WritableComparable<SimulatorSettingsWritable> {
 
 	private static final String SIMULATOR_SETTINGS_ID = "_SimulatorSettingsId";
 
@@ -143,8 +147,7 @@ public class SimulatorSettingsWritable extends MapEasyWritable implements Writab
 		}
 	}
 
-	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix,
-			Map<String, T> to) {
+	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
 		integers.put(algoSettingsPrefix + sizePostfix, from.size());
 		long index = 0;
 		for (Entry<String, T> i : from.entrySet()) {

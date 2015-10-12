@@ -21,14 +21,17 @@ public class TestGridHadoopStarter {
 
 	@Test
 	public void testGridHadoopStarter() throws Exception {
-		{
-			final HadoopSettings hadoopSettings = HadoopSettings.getInstance();
-			hadoopSettings.originalDatafeedPath = resourceToPath("./test_data").toFile().getAbsolutePath();
-			hadoopSettings.datafeedHdfsPath = FileSystems.getDefault().getPath(testFolder.getRoot().getAbsolutePath()).resolve("yahoo_datafeed").toString();
-			hadoopSettings.tmpFolder = testFolder.newFolder("tmp").getAbsolutePath();
-			hadoopSettings.outputPathOnLocal = testFolder.getRoot().getAbsolutePath();
-			final HadoopStarter hadoopStarter = new GridHadoopStarter(hadoopSettings);
-			Assert.assertEquals(8, hadoopStarter.searchOnHadoop().size());
-		}
+		final Path tempTestFolder = FileSystems.getDefault().getPath(testFolder.getRoot().getAbsolutePath());
+
+		final HadoopStarterSettings hadoopStarterSettings = HadoopStarterSettings.createBuilder(). //
+				setOriginalDatafeedPath(resourceToPath("./test_data").toFile().getAbsolutePath()). //
+				setDatafeedHdfsPath(tempTestFolder.resolve("yahoo_datafeed").toString()). //
+				setHdfsOutputPath(testFolder.getRoot().getAbsolutePath()). //
+				setLocalOutputPath(tempTestFolder.resolve("result_out").toFile().getAbsolutePath()). //
+				setTempLocalDir(testFolder.newFolder("tmp").getAbsolutePath()). //
+				build();
+
+		final HadoopStarter hadoopStarter = new GridHadoopStarter(hadoopStarterSettings);
+		Assert.assertEquals(8, hadoopStarter.searchOnHadoop().size());
 	}
 }
