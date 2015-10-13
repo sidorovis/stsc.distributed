@@ -2,9 +2,8 @@ package stsc.distributed.spark.grid;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
-
-import org.apache.spark.api.java.function.FlatMapFunction;
 
 import stsc.algorithms.Input;
 import stsc.algorithms.indices.primitive.stock.Ema;
@@ -14,6 +13,7 @@ import stsc.algorithms.primitive.eod.PositionNDayMStocks;
 import stsc.common.FromToPeriod;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
+import stsc.distributed.common.types.SimulatorSettingsExternalizable;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
 import stsc.general.simulator.multistarter.BadParameterException;
@@ -29,22 +29,18 @@ import stsc.storage.mocks.StockStorageMock;
  * This is {@link SimulatorSettings} generator / creator for the Spark Mapper
  * (Initial Input).
  */
-public final class GridRecordReader implements FlatMapFunction<String, SimulatorSettings> {
-
-	private static final long serialVersionUID = 9136652197296334330L;
+public final class GridRecordReader {
 
 	public GridRecordReader() {
 	}
 
-	@Override
-	public Iterable<SimulatorSettings> call(String notUsedValue) throws Exception {
-		final SimulatorSettingsGridList list = getGridList();
-		return list;
-	}
-
-	public SimulatorSettingsGridList getGridList() throws IOException {
+	public Iterable<SimulatorSettingsExternalizable> getGridList() throws IOException {
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
-		return getDefaultSimulatorSettingsGridList(stockStorage);
+		final ArrayList<SimulatorSettingsExternalizable> result = new ArrayList<>();
+		for (SimulatorSettings ss : getDefaultSimulatorSettingsGridList(stockStorage)) {
+			result.add(new SimulatorSettingsExternalizable(ss));
+		}
+		return result;
 	}
 
 	private SimulatorSettingsGridList getDefaultSimulatorSettingsGridList(final StockStorage stockStorage) throws IOException {
