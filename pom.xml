@@ -34,6 +34,7 @@
 	</build>
 	<modules>
 		<module>common</module>
+		<module>spark</module>
 	</modules>
 	<description>Stsc distributed - bunch of projects related with simulation process distribution on multi-pc infrastructure.</description>
 </project>
