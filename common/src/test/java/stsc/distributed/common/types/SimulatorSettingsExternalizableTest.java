@@ -14,10 +14,10 @@ import stsc.general.simulator.SimulatorSettings;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
-public class SimulatorSettingsWritableTest {
+public class SimulatorSettingsExternalizableTest {
 
 	@Test
-	public void testHadoopSimulatorSettings() throws IOException, BadAlgorithmException, ClassNotFoundException {
+	public void testSimulatorSettingsExternalizable() throws IOException, BadAlgorithmException, ClassNotFoundException {
 		final SimulatorSettingsGeneticList list = TestGeneticSimulatorSettings.getGeneticList();
 
 		for (int i = 0; i < 100; ++i) {
@@ -25,13 +25,13 @@ public class SimulatorSettingsWritableTest {
 			final PipedOutputStream output = new PipedOutputStream(input);
 
 			final SimulatorSettings ss = list.generateRandom();
-			final SimulatorSettingsWritable hss = new SimulatorSettingsWritable(ss);
+			final SimulatorSettingsExternalizable hss = new SimulatorSettingsExternalizable(ss);
 
 			final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 			hss.writeExternal(objectOutputStream);
 			objectOutputStream.flush();
 
-			final SimulatorSettingsWritable hssCopy = new SimulatorSettingsWritable();
+			final SimulatorSettingsExternalizable hssCopy = new SimulatorSettingsExternalizable();
 			hssCopy.readExternal(new ObjectInputStream(input));
 			input.close();
 

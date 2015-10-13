@@ -16,21 +16,21 @@ import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
-public class SimulatorSettingsGeneticListWritableTest {
+public class SimulatorSettingsGeneticListExternalizableTest {
 
 	@Test
-	public void testSimulatorSettingsGeneticListWritable() throws BadAlgorithmException, IOException, BadParameterException, ClassNotFoundException {
+	public void testSimulatorSettingsGeneticListExternalizable() throws BadAlgorithmException, IOException, BadParameterException, ClassNotFoundException {
 		final SimulatorSettingsGeneticList list = TestGeneticSimulatorSettings.getGeneticList();
 
 		final PipedInputStream input = new PipedInputStream(100000);
 		final PipedOutputStream output = new PipedOutputStream(input);
 
-		final SimulatorSettingsGeneticListWritable ssgl = new SimulatorSettingsGeneticListWritable(list);
+		final SimulatorSettingsGeneticListExternalizable ssgl = new SimulatorSettingsGeneticListExternalizable(list);
 		final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 		ssgl.writeExternal(objectOutputStream);
 		objectOutputStream.flush();
 
-		final SimulatorSettingsGeneticListWritable ssglCopy = new SimulatorSettingsGeneticListWritable();
+		final SimulatorSettingsGeneticListExternalizable ssglCopy = new SimulatorSettingsGeneticListExternalizable();
 		ssglCopy.readExternal(new ObjectInputStream(input));
 		input.close();
 

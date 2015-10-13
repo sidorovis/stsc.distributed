@@ -10,16 +10,16 @@ import stsc.general.statistic.Metrics;
 /**
  * This is implementation for {@link Externalizable} of {@link Metrics}.
  */
-public final class MetricsWritable extends MapEasyWritable {
+public final class MetricsExternalizable extends MapEasyExternalizable {
 
 	private static String DOUBLE_SIZE = "sizeDouble";
 	private static String INTEGER_SIZE = "sizeInteger";
 
-	public MetricsWritable(final Metrics metrics) {
+	public MetricsExternalizable(final Metrics metrics) {
 		saveStatistics(metrics);
 	}
 
-	protected MetricsWritable() {
+	public MetricsExternalizable() {
 	}
 
 	private void saveStatistics(final Metrics metrics) {

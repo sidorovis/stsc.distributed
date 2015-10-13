@@ -21,7 +21,7 @@ import stsc.general.strategy.TradingStrategy;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 import stsc.storage.mocks.StockStorageMock;
 
-public class TradingStrategyWritableTest {
+public class TradingStrategyExternalizableTest {
 
 	private SimulatorSettings getSettings() throws BadAlgorithmException {
 		final SimulatorSettingsGeneticList list = TestGeneticSimulatorSettings.getGeneticList();
@@ -38,19 +38,19 @@ public class TradingStrategyWritableTest {
 	}
 
 	@Test
-	public void testTradingStrategyWritable() throws BadAlgorithmException, IOException, ClassNotFoundException {
+	public void testTradingStrategyExternalizable() throws BadAlgorithmException, IOException, ClassNotFoundException {
 		final TradingStrategy ts = new TradingStrategy(getSettings(), getMetrics());
 
 		final PipedInputStream input = new PipedInputStream(100000);
 		final PipedOutputStream output = new PipedOutputStream(input);
 
-		final TradingStrategyWritable tsw = new TradingStrategyWritable(ts);
+		final TradingStrategyExternalizable tsw = new TradingStrategyExternalizable(ts);
 
 		final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 		tsw.writeExternal(objectOutputStream);
 		objectOutputStream.flush();
 
-		final TradingStrategyWritable tswCopy = new TradingStrategyWritable();
+		final TradingStrategyExternalizable tswCopy = new TradingStrategyExternalizable();
 		tswCopy.readExternal(new ObjectInputStream(input));
 		input.close();
 

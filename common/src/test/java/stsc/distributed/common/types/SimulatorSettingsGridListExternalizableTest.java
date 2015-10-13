@@ -13,21 +13,21 @@ import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.general.testhelper.TestGridSimulatorSettings;
 
-public class SimulatorSettingsGridListWritableTest {
+public class SimulatorSettingsGridListExternalizableTest {
 
 	@Test
-	public void testSimulatorSettingsGridListWritable() throws IOException, BadParameterException, ClassNotFoundException {
+	public void testSimulatorSettingsGridListExternalizable() throws IOException, BadParameterException, ClassNotFoundException {
 		final SimulatorSettingsGridList list = TestGridSimulatorSettings.getGridList();
 
 		final PipedInputStream input = new PipedInputStream(100000);
 		final PipedOutputStream output = new PipedOutputStream(input);
 
-		final SimulatorSettingsGridListWritable ssgl = new SimulatorSettingsGridListWritable(list);
+		final SimulatorSettingsGridListExternalizable ssgl = new SimulatorSettingsGridListExternalizable(list);
 		final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 		ssgl.writeExternal(objectOutputStream);
 		objectOutputStream.flush();
 
-		final SimulatorSettingsGridListWritable ssglCopy = new SimulatorSettingsGridListWritable();
+		final SimulatorSettingsGridListExternalizable ssglCopy = new SimulatorSettingsGridListExternalizable();
 		ssglCopy.readExternal(new ObjectInputStream(input));
 		input.close();
 

@@ -15,10 +15,10 @@ import stsc.common.Settings;
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 
-public class StatisticsWritableTest {
+public class StatisticsExternalizableTest {
 
 	@Test
-	public void testStatisticsWritable() throws IOException, ClassNotFoundException {
+	public void testStatisticsExternalizable() throws IOException, ClassNotFoundException {
 		final Map<MetricType, Double> doubleList = new HashMap<>();
 		doubleList.put(MetricType.avGain, 10.45);
 		doubleList.put(MetricType.avWinAvLoss, 62.13);
@@ -32,13 +32,13 @@ public class StatisticsWritableTest {
 		final PipedInputStream input = new PipedInputStream(100000);
 		final PipedOutputStream output = new PipedOutputStream(input);
 
-		final MetricsWritable sw = new MetricsWritable(s);
+		final MetricsExternalizable sw = new MetricsExternalizable(s);
 
 		final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
 		sw.writeExternal(objectOutputStream);
 		objectOutputStream.flush();
 
-		final MetricsWritable swCopy = new MetricsWritable();
+		final MetricsExternalizable swCopy = new MetricsExternalizable();
 		swCopy.readExternal(new ObjectInputStream(input));
 
 		final Metrics sCopy = swCopy.getMetrics();

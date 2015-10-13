@@ -13,7 +13,7 @@ import java.util.Map.Entry;
  * type with String / longs / integers / booleans / doubles field types (or
  * integral).
  */
-public class MapEasyWritable implements Externalizable {
+public abstract class MapEasyExternalizable implements Externalizable {
 
 	protected final Map<String, String> strings;
 	protected final Map<String, Long> longs;
@@ -21,7 +21,7 @@ public class MapEasyWritable implements Externalizable {
 	protected final Map<String, Boolean> booleans;
 	protected final Map<String, Double> doubles;
 
-	protected MapEasyWritable() {
+	protected MapEasyExternalizable() {
 		this.strings = new HashMap<>();
 		this.longs = new HashMap<>();
 		this.integers = new HashMap<>();

@@ -14,21 +14,21 @@ import stsc.general.strategy.TradingStrategy;
 /**
  * This is implementation for {@link Externalizable} of {@link TradingStrategy}.
  */
-public final class TradingStrategyWritable implements Externalizable {
+public final class TradingStrategyExternalizable implements Externalizable {
 
 	private TradingStrategy tradingStrategy;
 
-	private SimulatorSettingsWritable simulatorSettingsWritable;
-	private MetricsWritable metricsWritable;
+	private SimulatorSettingsExternalizable simulatorSettingsWritable;
+	private MetricsExternalizable metricsWritable;
 
-	public TradingStrategyWritable(TradingStrategy ts) {
+	public TradingStrategyExternalizable(TradingStrategy ts) {
 		this.tradingStrategy = ts;
 	}
 
 	/**
 	 * For reading
 	 */
-	public TradingStrategyWritable() {
+	public TradingStrategyExternalizable() {
 	}
 
 	public TradingStrategy getTradingStrategy(final StockStorage stockStorage) throws BadAlgorithmException {
@@ -39,17 +39,17 @@ public final class TradingStrategyWritable implements Externalizable {
 	public void writeExternal(ObjectOutput out) throws IOException {
 		final SimulatorSettings settings = tradingStrategy.getSettings();
 		final Metrics metrics = tradingStrategy.getMetrics();
-		final SimulatorSettingsWritable ssw = new SimulatorSettingsWritable(settings);
+		final SimulatorSettingsExternalizable ssw = new SimulatorSettingsExternalizable(settings);
 		ssw.writeExternal(out);
-		final MetricsWritable sw = new MetricsWritable(metrics);
+		final MetricsExternalizable sw = new MetricsExternalizable(metrics);
 		sw.writeExternal(out);
 	}
 
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		simulatorSettingsWritable = new SimulatorSettingsWritable();
+		simulatorSettingsWritable = new SimulatorSettingsExternalizable();
 		simulatorSettingsWritable.readExternal(in);
-		metricsWritable = new MetricsWritable();
+		metricsWritable = new MetricsExternalizable();
 		metricsWritable.readExternal(in);
 	}
 }

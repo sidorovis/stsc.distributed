@@ -20,7 +20,7 @@ import stsc.storage.ExecutionsStorage;
  * This is implementation for {@link Externalizable} of
  * {@link SimulatorSettings}.
  */
-public final class SimulatorSettingsWritable extends MapEasyWritable implements Comparable<SimulatorSettingsWritable> {
+public final class SimulatorSettingsExternalizable extends MapEasyExternalizable implements Comparable<SimulatorSettingsExternalizable> {
 
 	private static final String SIMULATOR_SETTINGS_ID = "_SimulatorSettingsId";
 
@@ -58,11 +58,12 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	private long id;
 	private FromToPeriod period;
 
-	protected SimulatorSettingsWritable() {
+	// for reading
+	public SimulatorSettingsExternalizable() {
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	public SimulatorSettingsWritable(final SimulatorSettings ss) {
+	public SimulatorSettingsExternalizable(final SimulatorSettings ss) {
 		this();
 		id = ss.getId();
 		longs.put(SIMULATOR_SETTINGS_ID, ss.getId());
@@ -145,8 +146,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix,
-			Map<String, T> to) {
+	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
 		integers.put(algoSettingsPrefix + sizePostfix, from.size());
 		long index = 0;
 		for (Entry<String, T> i : from.entrySet()) {
@@ -284,7 +284,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	@Override
-	public int compareTo(SimulatorSettingsWritable o) {
+	public int compareTo(SimulatorSettingsExternalizable o) {
 		return (int) (this.id - o.id);
 	}
 }

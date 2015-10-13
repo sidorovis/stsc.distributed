@@ -24,7 +24,7 @@ import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
  * This is implementation for {@link Externalizable} of
  * {@link SimulatorSettingsGridList}.
  */
-public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
+public final class SimulatorSettingsGridListExternalizable extends MapEasyExternalizable {
 
 	private static final String PERIOD_FROM = "periodFrom";
 	private static final String PERIOD_TO = "periodTo";
@@ -40,11 +40,12 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 	// will be filled in the middle of generating
 	private FromToPeriod period;
 
-	protected SimulatorSettingsGridListWritable() {
+	// for reading
+	public SimulatorSettingsGridListExternalizable() {
 	}
 
 	// List -> Writable
-	public SimulatorSettingsGridListWritable(final SimulatorSettingsGridList list) {
+	public SimulatorSettingsGridListExternalizable(final SimulatorSettingsGridList list) {
 		this();
 		saveList(list);
 	}
