@@ -21,7 +21,7 @@ import stsc.storage.ThreadSafeStockStorage;
  */
 public final class HadoopYahooStockStorage {
 
-	private volatile StockStorage stockStorage = null;
+	private volatile ThreadSafeStockStorage stockStorage = null;
 
 	public synchronized StockStorage getStockStorage(Configuration configuration) throws IOException {
 		final FileSystem hdfs = FileSystem.get(configuration);
