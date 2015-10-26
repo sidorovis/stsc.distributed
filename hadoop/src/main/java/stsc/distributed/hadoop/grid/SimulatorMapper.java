@@ -50,7 +50,8 @@ public final class SimulatorMapper extends Mapper<LongWritable, SimulatorSetting
 		final StockStorage stockStorage = hadoopYahooStockStorage.getStockStorage(context.getConfiguration());
 		try {
 			final SimulatorSettings settings = value.getSimulatorSettings(stockStorage);
-			final Simulator simulator = new SimulatorImpl(settings);
+			final Simulator simulator = new SimulatorImpl();
+			simulator.simulateMarketTrading(settings);
 			final Metrics metrics = simulator.getMetrics();
 			final TradingStrategy tradingStrategy = new TradingStrategy(settings, metrics);
 			context.write(zero, new TradingStrategyWritable(tradingStrategy));

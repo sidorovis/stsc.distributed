@@ -26,7 +26,8 @@ public final class SimulatorMapper implements Function<SimulatorSettingsExternal
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		try {
 			final SimulatorSettings simulatorSettings = settings.getSimulatorSettings(stockStorage);
-			final Simulator simulator = new SimulatorImpl(simulatorSettings);
+			final Simulator simulator = new SimulatorImpl();
+			simulator.simulateMarketTrading(simulatorSettings);
 			final Metrics metrics = simulator.getMetrics();
 			return new TradingStrategyExternalizable(new TradingStrategy(simulatorSettings, metrics));
 		} catch (BadAlgorithmException | BadSignalException e) {

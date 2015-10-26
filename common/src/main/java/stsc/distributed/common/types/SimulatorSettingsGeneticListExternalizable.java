@@ -20,11 +20,11 @@ import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 
 /**
  * This is implementation for {@link Externalizable} of
- * {@link SimulatorSettingsGeneticList}.
+ * {@link SimulatorSettingsGeneticListImpl}.
  */
 public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExternalizable {
 
@@ -57,12 +57,12 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 	}
 
 	// List -> Writable
-	public SimulatorSettingsGeneticListExternalizable(final SimulatorSettingsGeneticList list) {
+	public SimulatorSettingsGeneticListExternalizable(final SimulatorSettingsGeneticListImpl list) {
 		this();
 		saveGeneticList(list);
 	}
 
-	private void saveGeneticList(SimulatorSettingsGeneticList list) {
+	private void saveGeneticList(SimulatorSettingsGeneticListImpl list) {
 		longs.put(GENETIC_LIST_ID, list.getId());
 		longs.put(PERIOD_FROM, list.getPeriod().getFrom().getTime());
 		longs.put(PERIOD_TO, list.getPeriod().getTo().getTime());
@@ -70,11 +70,11 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		saveEods(list);
 	}
 
-	private void saveStocks(SimulatorSettingsGeneticList list) {
+	private void saveStocks(SimulatorSettingsGeneticListImpl list) {
 		saveInitializers(STOCK_PREFIX, list.getStockInitializers());
 	}
 
-	private void saveEods(SimulatorSettingsGeneticList list) {
+	private void saveEods(SimulatorSettingsGeneticListImpl list) {
 		saveInitializers(EOD_PREFIX, list.getEodInitializers());
 	}
 
@@ -156,7 +156,7 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	public SimulatorSettingsGeneticList getGeneticList(StockStorage stockStorage) throws BadParameterException {
+	public SimulatorSettingsGeneticListImpl getGeneticList(StockStorage stockStorage) throws BadParameterException {
 		final long periodFrom = longs.get(PERIOD_FROM);
 		final long periodTo = longs.get(PERIOD_TO);
 		this.period = new FromToPeriod(new Date(periodFrom), new Date(periodTo));

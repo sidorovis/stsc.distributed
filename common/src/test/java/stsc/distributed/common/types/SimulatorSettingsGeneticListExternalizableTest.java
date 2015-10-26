@@ -13,14 +13,14 @@ import org.junit.Test;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
 public class SimulatorSettingsGeneticListExternalizableTest {
 
 	@Test
 	public void testSimulatorSettingsGeneticListExternalizable() throws BadAlgorithmException, IOException, BadParameterException, ClassNotFoundException {
-		final SimulatorSettingsGeneticList list = TestGeneticSimulatorSettings.getGeneticList();
+		final SimulatorSettingsGeneticListImpl list = TestGeneticSimulatorSettings.getGeneticList();
 
 		final PipedInputStream input = new PipedInputStream(100000);
 		final PipedOutputStream output = new PipedOutputStream(input);
@@ -34,7 +34,7 @@ public class SimulatorSettingsGeneticListExternalizableTest {
 		ssglCopy.readExternal(new ObjectInputStream(input));
 		input.close();
 
-		final SimulatorSettingsGeneticList listCopy = ssglCopy.getGeneticList(list.getStockStorage());
+		final SimulatorSettingsGeneticListImpl listCopy = ssglCopy.getGeneticList(list.getStockStorage());
 
 		final List<GeneticExecutionInitializer> stocks = list.getStockInitializers();
 		final List<GeneticExecutionInitializer> stocksCopy = listCopy.getStockInitializers();

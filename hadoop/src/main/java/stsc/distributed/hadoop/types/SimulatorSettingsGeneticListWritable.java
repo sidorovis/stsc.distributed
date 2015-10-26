@@ -22,10 +22,10 @@ import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 
 /**
- * This is implementation for {@link Writable} of
- * {@link SimulatorSettingsGeneticList}.
+ * This is implementation for {@link Writable} of {@link SimulatorSettingsGeneticListImpl}.
  */
 public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable {
 
@@ -156,7 +156,7 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	public SimulatorSettingsGeneticList getGeneticList(StockStorage stockStorage) throws BadParameterException {
+	public SimulatorSettingsGeneticListImpl getGeneticList(StockStorage stockStorage) throws BadParameterException {
 		final long periodFrom = longs.get(PERIOD_FROM);
 		final long periodTo = longs.get(PERIOD_TO);
 		this.period = new FromToPeriod(new Date(periodFrom), new Date(periodTo));

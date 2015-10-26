@@ -9,14 +9,14 @@ import org.junit.Test;
 
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.general.simulator.SimulatorSettings;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
 public class SimulatorSettingsWritableTest {
 
 	@Test
 	public void testHadoopSimulatorSettings() throws IOException, BadAlgorithmException {
-		final SimulatorSettingsGeneticList list = TestGeneticSimulatorSettings.getGeneticList();
+		final SimulatorSettingsGeneticListImpl list = TestGeneticSimulatorSettings.getGeneticList();
 
 		for (int i = 0; i < 100; ++i) {
 			final DataOutputByteBuffer output = new DataOutputByteBuffer();
