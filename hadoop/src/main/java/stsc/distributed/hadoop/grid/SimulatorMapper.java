@@ -12,6 +12,7 @@ import stsc.distributed.hadoop.HadoopYahooStockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.simulator.Simulator;
+import stsc.general.simulator.SimulatorImpl;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
@@ -27,7 +28,7 @@ import stsc.general.strategy.TradingStrategy;
  * 2.a. zero value - because we require some common key for all reducers; <br/>
  * 2.b. {@link TradingStrategyWritable} - Trading Strategy with calculated
  * metrics. <br/>
- * The goal of Mapper task is to execute {@link Simulator} and calculate
+ * The goal of Mapper task is to execute {@link SimulatorImpl} and calculate
  * {@link Metrics} for the trading strategy.
  */
 public final class SimulatorMapper extends Mapper<LongWritable, SimulatorSettingsWritable, LongWritable, TradingStrategyWritable> {
@@ -49,7 +50,7 @@ public final class SimulatorMapper extends Mapper<LongWritable, SimulatorSetting
 		final StockStorage stockStorage = hadoopYahooStockStorage.getStockStorage(context.getConfiguration());
 		try {
 			final SimulatorSettings settings = value.getSimulatorSettings(stockStorage);
-			final Simulator simulator = new Simulator(settings);
+			final Simulator simulator = new SimulatorImpl(settings);
 			final Metrics metrics = simulator.getMetrics();
 			final TradingStrategy tradingStrategy = new TradingStrategy(settings, metrics);
 			context.write(zero, new TradingStrategyWritable(tradingStrategy));

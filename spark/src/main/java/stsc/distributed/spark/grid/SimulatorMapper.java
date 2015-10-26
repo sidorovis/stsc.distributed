@@ -8,6 +8,7 @@ import stsc.common.storage.StockStorage;
 import stsc.distributed.common.types.SimulatorSettingsExternalizable;
 import stsc.distributed.common.types.TradingStrategyExternalizable;
 import stsc.general.simulator.Simulator;
+import stsc.general.simulator.SimulatorImpl;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
@@ -25,7 +26,7 @@ public final class SimulatorMapper implements Function<SimulatorSettingsExternal
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		try {
 			final SimulatorSettings simulatorSettings = settings.getSimulatorSettings(stockStorage);
-			final Simulator simulator = new Simulator(simulatorSettings);
+			final Simulator simulator = new SimulatorImpl(simulatorSettings);
 			final Metrics metrics = simulator.getMetrics();
 			return new TradingStrategyExternalizable(new TradingStrategy(simulatorSettings, metrics));
 		} catch (BadAlgorithmException | BadSignalException e) {
