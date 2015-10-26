@@ -20,6 +20,7 @@ import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.grid.AlgorithmSettingsGridIterator;
 import stsc.general.simulator.multistarter.grid.GridExecutionInitializer;
+import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 
 /**
@@ -127,7 +128,14 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		this.period = loadPeriod();
 		final List<GridExecutionInitializer> stockInitializers = loadInitializers(STOCK_PREFIX);
 		final List<GridExecutionInitializer> eodInitializers = loadInitializers(EOD_PREFIX);
-		return new SimulatorSettingsGridList(stockStorage, period, stockInitializers, eodInitializers, false);
+		final SimulatorSettingsGridFactory factory = new SimulatorSettingsGridFactory(stockStorage, period);
+		for (GridExecutionInitializer stockInit : stockInitializers) {
+			factory.addStock(stockInit);
+		}
+		for (GridExecutionInitializer eodInit : eodInitializers) {
+			factory.addEod(eodInit);
+		}
+		return factory.getList();
 	}
 
 	private FromToPeriod loadPeriod() {

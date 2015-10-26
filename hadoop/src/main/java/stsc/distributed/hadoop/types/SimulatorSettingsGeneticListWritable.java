@@ -20,6 +20,7 @@ import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 
 /**
@@ -161,7 +162,14 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		this.period = new FromToPeriod(new Date(periodFrom), new Date(periodTo));
 		final List<GeneticExecutionInitializer> stockInitializers = loadStockInitializers();
 		final List<GeneticExecutionInitializer> eodInitializers = loadEodInitializers();
-		return new SimulatorSettingsGeneticList(stockStorage, period, stockInitializers, eodInitializers);
+		final SimulatorSettingsGeneticFactory factory = new SimulatorSettingsGeneticFactory(stockStorage, period);
+		for (GeneticExecutionInitializer stockInit : stockInitializers) {
+			factory.addStock(stockInit);
+		}
+		for (GeneticExecutionInitializer eodInit : eodInitializers) {
+			factory.addEod(eodInit);
+		}
+		return factory.getList();
 	}
 
 	private List<GeneticExecutionInitializer> loadStockInitializers() throws BadParameterException {

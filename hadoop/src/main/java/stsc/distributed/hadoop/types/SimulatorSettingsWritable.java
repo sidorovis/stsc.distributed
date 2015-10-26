@@ -124,15 +124,15 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	private void saveIntegers(AlgorithmSettings settings, String algoSettingsPrefix) {
-		saveTypes(settings, algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
+		saveTypes(algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
 	}
 
 	private void saveDoubles(AlgorithmSettings settings, String algoSettingsPrefix) {
-		saveTypes(settings, algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
+		saveTypes(algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
 	}
 
 	private void saveStrings(AlgorithmSettings settings, String algoSettingsPrefix) {
-		saveTypes(settings, algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
+		saveTypes(algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
 	}
 
 	private void saveSubExecutions(AlgorithmSettings settings, String algoSettingsPrefix) {
@@ -147,7 +147,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
+	private <T> void saveTypes(String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
 		integers.put(algoSettingsPrefix + sizePostfix, from.size());
 		long index = 0;
 		for (Entry<String, T> i : from.entrySet()) {
