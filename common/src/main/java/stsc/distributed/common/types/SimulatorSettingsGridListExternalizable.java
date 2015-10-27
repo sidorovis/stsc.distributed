@@ -22,8 +22,7 @@ import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 
 /**
- * This is implementation for {@link Externalizable} of
- * {@link SimulatorSettingsGridList}.
+ * This is implementation for {@link Externalizable} of {@link SimulatorSettingsGridList}.
  */
 public final class SimulatorSettingsGridListExternalizable extends MapEasyExternalizable {
 
@@ -132,7 +131,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 			factory.addStock(stockInit);
 		}
 		for (GridExecutionInitializer eodInit : eodInitializers) {
-			factory.addStock(eodInit);
+			factory.addEod(eodInit);
 		}
 		return factory.getList();
 	}

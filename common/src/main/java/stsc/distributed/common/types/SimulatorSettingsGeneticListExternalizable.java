@@ -18,13 +18,13 @@ import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.ExternalizableGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 
 /**
- * This is implementation for {@link Externalizable} of
- * {@link SimulatorSettingsGeneticListImpl}.
+ * This is implementation for {@link Externalizable} of {@link SimulatorSettingsGeneticListImpl}.
  */
 public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExternalizable {
 
@@ -57,12 +57,12 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 	}
 
 	// List -> Writable
-	public SimulatorSettingsGeneticListExternalizable(final SimulatorSettingsGeneticListImpl list) {
+	public SimulatorSettingsGeneticListExternalizable(final ExternalizableGeneticList list) {
 		this();
 		saveGeneticList(list);
 	}
 
-	private void saveGeneticList(SimulatorSettingsGeneticListImpl list) {
+	private void saveGeneticList(ExternalizableGeneticList list) {
 		longs.put(GENETIC_LIST_ID, list.getId());
 		longs.put(PERIOD_FROM, list.getPeriod().getFrom().getTime());
 		longs.put(PERIOD_TO, list.getPeriod().getTo().getTime());
@@ -70,11 +70,11 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		saveEods(list);
 	}
 
-	private void saveStocks(SimulatorSettingsGeneticListImpl list) {
+	private void saveStocks(ExternalizableGeneticList list) {
 		saveInitializers(STOCK_PREFIX, list.getStockInitializers());
 	}
 
-	private void saveEods(SimulatorSettingsGeneticListImpl list) {
+	private void saveEods(ExternalizableGeneticList list) {
 		saveInitializers(EOD_PREFIX, list.getEodInitializers());
 	}
 

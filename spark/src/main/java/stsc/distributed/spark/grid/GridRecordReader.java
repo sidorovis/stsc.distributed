@@ -15,6 +15,7 @@ import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.common.types.SimulatorSettingsExternalizable;
 import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorSettingsImpl;
 import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
@@ -26,7 +27,7 @@ import stsc.storage.AlgorithmsStorage;
 import stsc.storage.mocks.StockStorageMock;
 
 /**
- * This is {@link SimulatorSettings} generator / creator for the Spark Mapper
+ * This is {@link SimulatorSettingsImpl} generator / creator for the Spark Mapper
  * (Initial Input).
  */
 public final class GridRecordReader {

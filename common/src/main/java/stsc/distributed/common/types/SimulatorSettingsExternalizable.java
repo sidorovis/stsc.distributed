@@ -13,12 +13,13 @@ import stsc.common.algorithms.EodExecution;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorSettingsImpl;
 import stsc.general.trading.TradeProcessorInit;
 import stsc.storage.ExecutionsStorage;
 
 /**
  * This is implementation for {@link Externalizable} of
- * {@link SimulatorSettings}.
+ * {@link SimulatorSettingsImpl}.
  */
 public final class SimulatorSettingsExternalizable extends MapEasyExternalizable implements Comparable<SimulatorSettingsExternalizable> {
 
@@ -160,11 +161,11 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	public SimulatorSettings getSimulatorSettings(final StockStorage stockStorage) throws BadAlgorithmException {
+	public SimulatorSettingsImpl getSimulatorSettings(final StockStorage stockStorage) throws BadAlgorithmException {
 		final TradeProcessorInit init = loadTradeProcessor(stockStorage);
 		final long id = longs.get(SIMULATOR_SETTINGS_ID);
 		this.id = id;
-		return new SimulatorSettings(id, init);
+		return new SimulatorSettingsImpl(id, init);
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings

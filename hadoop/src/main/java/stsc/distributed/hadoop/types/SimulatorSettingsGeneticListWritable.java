@@ -19,9 +19,9 @@ import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
 import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.ExternalizableGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 
 /**
@@ -57,12 +57,12 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 	}
 
 	// List -> Writable
-	public SimulatorSettingsGeneticListWritable(final SimulatorSettingsGeneticList list) {
+	public SimulatorSettingsGeneticListWritable(final ExternalizableGeneticList list) {
 		this();
 		saveGeneticList(list);
 	}
 
-	private void saveGeneticList(SimulatorSettingsGeneticList list) {
+	private void saveGeneticList(ExternalizableGeneticList list) {
 		longs.put(GENETIC_LIST_ID, list.getId());
 		longs.put(PERIOD_FROM, list.getPeriod().getFrom().getTime());
 		longs.put(PERIOD_TO, list.getPeriod().getTo().getTime());
@@ -70,11 +70,11 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		saveEods(list);
 	}
 
-	private void saveStocks(SimulatorSettingsGeneticList list) {
+	private void saveStocks(ExternalizableGeneticList list) {
 		saveInitializers(STOCK_PREFIX, list.getStockInitializers());
 	}
 
-	private void saveEods(SimulatorSettingsGeneticList list) {
+	private void saveEods(ExternalizableGeneticList list) {
 		saveInitializers(EOD_PREFIX, list.getEodInitializers());
 	}
 

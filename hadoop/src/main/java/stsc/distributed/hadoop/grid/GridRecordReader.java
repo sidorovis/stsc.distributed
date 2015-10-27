@@ -22,6 +22,7 @@ import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.HadoopYahooStockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorSettingsImpl;
 import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
@@ -33,14 +34,14 @@ import stsc.storage.AlgorithmsStorage;
 
 /**
  * This actually only example how it is possible to create one layered
- * distributed {@link SimulatorSettings} (for Grid (brute-force) search). <br/>
+ * distributed {@link SimulatorSettingsImpl} (for Grid (brute-force) search). <br/>
  * Simulator Settings are hard-coded.
  */
 public final class GridRecordReader extends RecordReader<LongWritable, SimulatorSettingsWritable> {
 
 	private long size;
 	private long id = 0;
-	private Iterator<SimulatorSettings> iterator;
+	private Iterator<SimulatorSettingsImpl> iterator;
 	private SimulatorSettings current;
 	private boolean finished;
 
