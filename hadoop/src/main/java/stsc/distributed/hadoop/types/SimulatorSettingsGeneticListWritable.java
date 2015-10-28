@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Writable;
 
 import stsc.common.FromToPeriod;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.multistarter.AlgorithmParameters;
+import stsc.general.simulator.multistarter.MultiAlgorithmParameters;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
@@ -100,7 +100,7 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 
 	}
 
-	private void saveParameters(String execPrefix, AlgorithmParameters parameters) {
+	private void saveParameters(String execPrefix, MultiAlgorithmParameters parameters) {
 		saveIntegers(execPrefix, parameters.getIntegers());
 		saveDoubles(execPrefix, parameters.getDoubles());
 		saveStrings(execPrefix, parameters.getStrings());
@@ -202,12 +202,12 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 	}
 
 	private AlgorithmSettingsGeneticList loadAlgorithmSettings(String execPrefix) throws BadParameterException {
-		AlgorithmParameters parameters = loadAlgorithmParameters(execPrefix);
+		MultiAlgorithmParameters parameters = loadAlgorithmParameters(execPrefix);
 		return new AlgorithmSettingsGeneticList(period, parameters);
 	}
 
-	private AlgorithmParameters loadAlgorithmParameters(String execPrefix) throws BadParameterException {
-		final AlgorithmParameters result = new AlgorithmParameters();
+	private MultiAlgorithmParameters loadAlgorithmParameters(String execPrefix) throws BadParameterException {
+		final MultiAlgorithmParameters result = new MultiAlgorithmParameters();
 		loadIntegers(result, execPrefix);
 		loadDoubles(result, execPrefix);
 		loadStrings(result, execPrefix);
@@ -215,15 +215,15 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		return result;
 	}
 
-	private void loadIntegers(AlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadIntegers(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
 		loadIntegerType(execPrefix, result, integers, INTEGERS_SIZE, INTEGER_NAME);
 	}
 
-	private void loadDoubles(AlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadDoubles(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
 		loadDoubleType(execPrefix, result, doubles, DOUBLES_SIZE, DOUBLE_NAME);
 	}
 
-	private void loadStrings(AlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadStrings(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
 		final int size = integers.get(execPrefix + STRINGS_SIZE);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + STRING_NAME + "." + String.valueOf(index);
@@ -241,7 +241,7 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void loadSubExecutions(AlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadSubExecutions(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
 		final int size = integers.get(execPrefix + SUB_EXECUTIONS_SIZE);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + SUB_EXECUTION_NAME + "." + String.valueOf(index);
@@ -259,7 +259,7 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void loadIntegerType(String execPrefix, AlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadIntegerType(String execPrefix, MultiAlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix) throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);
@@ -273,7 +273,7 @@ public final class SimulatorSettingsGeneticListWritable extends MapEasyWritable 
 		}
 	}
 
-	private void loadDoubleType(String execPrefix, AlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadDoubleType(String execPrefix, MultiAlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix) throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);

@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Writable;
 
 import stsc.common.FromToPeriod;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.multistarter.AlgorithmParameters;
+import stsc.general.simulator.multistarter.MultiAlgorithmParameters;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
@@ -73,7 +73,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		saveParameters(prefixExec, initializer.iterator.getParameters());
 	}
 
-	private void saveParameters(String prefix, AlgorithmParameters parameters) {
+	private void saveParameters(String prefix, MultiAlgorithmParameters parameters) {
 		saveIntegers(prefix + ".integer.", parameters.getIntegers(), integers);
 		saveDoubles(prefix + ".double.", parameters.getDoubles(), doubles);
 		saveStrings(prefix + ".string.", parameters.getStrings(), strings);
@@ -156,13 +156,13 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		final String prefixExec = createExecPrefix(prefix, index);
 		final String execName = strings.get(prefixExec);
 		final String algoName = strings.get(prefix + String.valueOf(index) + "." + ALGO_NAME);
-		final AlgorithmParameters parameters = loadParameters(prefixExec);
+		final MultiAlgorithmParameters parameters = loadParameters(prefixExec);
 		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(period, false, parameters);
 		return new GridExecutionInitializer(execName, algoName, paramsElement);
 	}
 
-	private AlgorithmParameters loadParameters(String prefixExec) throws BadParameterException {
-		final AlgorithmParameters result = new AlgorithmParameters();
+	private MultiAlgorithmParameters loadParameters(String prefixExec) throws BadParameterException {
+		final MultiAlgorithmParameters result = new MultiAlgorithmParameters();
 		loadIntegers(result, prefixExec + ".integer.");
 		loadDoubles(result, prefixExec + ".double.");
 		loadStrings(result, prefixExec + ".string.");
@@ -170,7 +170,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		return result;
 	}
 
-	private void loadIntegers(AlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadIntegers(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String indexPrefix = prefix + String.valueOf(i);
@@ -182,7 +182,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		}
 	}
 
-	private void loadDoubles(AlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadDoubles(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String indexPrefix = prefix + String.valueOf(i);
@@ -194,7 +194,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		}
 	}
 
-	private void loadStrings(AlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadStrings(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String dp = prefix + String.valueOf(i) + ".";
@@ -209,7 +209,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		}
 	}
 
-	private void loadSubExecutions(AlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadSubExecutions(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String dp = prefix + String.valueOf(i) + ".";
