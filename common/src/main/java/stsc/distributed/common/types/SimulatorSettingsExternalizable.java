@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import stsc.algorithms.AlgorithmConfigurationImpl;
 import stsc.common.FromToPeriod;
 import stsc.common.algorithms.AlgorithmConfiguration;
 import stsc.common.algorithms.BadAlgorithmException;
@@ -13,6 +12,7 @@ import stsc.common.algorithms.EodExecution;
 import stsc.common.algorithms.MutatingAlgorithmConfiguration;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
+import stsc.general.algorithm.AlgorithmConfigurationImpl;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.simulator.SimulatorSettingsImpl;
 import stsc.general.trading.TradeProcessorInit;
