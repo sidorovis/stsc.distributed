@@ -18,8 +18,7 @@ import stsc.general.trading.TradeProcessorInit;
 import stsc.storage.ExecutionsStorage;
 
 /**
- * This is implementation for {@link Externalizable} of
- * {@link SimulatorSettingsImpl}.
+ * This is implementation for {@link Externalizable} of {@link SimulatorSettingsImpl}.
  */
 public final class SimulatorSettingsExternalizable extends MapEasyExternalizable implements Comparable<SimulatorSettingsExternalizable> {
 
@@ -218,7 +217,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 
 	// SimulatorSettingsWritable -> SimulatorSettings
 	private AlgorithmSettingsImpl loadAlgorithmSettings(String executionName, String prefix) {
-		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl(this.period);
+		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl();
 		// algoSettingsPrefix = "StockExecutions_54.ExecutionName";
 		// algoSettingsPrefix = "EodExecutions_76.TheUserDefinedName";
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);

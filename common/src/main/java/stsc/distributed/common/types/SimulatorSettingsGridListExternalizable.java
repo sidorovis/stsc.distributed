@@ -155,7 +155,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		final String execName = strings.get(prefixExec);
 		final String algoName = strings.get(prefix + String.valueOf(index) + "." + ALGO_NAME);
 		final MultiAlgorithmParameters parameters = loadParameters(prefixExec);
-		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(period, false, parameters);
+		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(parameters);
 		return new GridExecutionInitializer(execName, algoName, paramsElement);
 	}
 

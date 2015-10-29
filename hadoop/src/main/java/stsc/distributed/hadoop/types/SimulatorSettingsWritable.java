@@ -219,7 +219,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 
 	// SimulatorSettingsWritable -> SimulatorSettings
 	private AlgorithmSettingsImpl loadAlgorithmSettings(String executionName, String prefix) {
-		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl(this.period);
+		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl();
 		// algoSettingsPrefix = "StockExecutions_54.ExecutionName";
 		// algoSettingsPrefix = "EodExecutions_76.TheUserDefinedName";
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);

@@ -33,8 +33,7 @@ import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.storage.AlgorithmsStorage;
 
 /**
- * This actually only example how it is possible to create one layered
- * distributed {@link SimulatorSettingsImpl} (for Grid (brute-force) search). <br/>
+ * This actually only example how it is possible to create one layered distributed {@link SimulatorSettingsImpl} (for Grid (brute-force) search). <br/>
  * Simulator Settings are hard-coded.
  */
 public final class GridRecordReader extends RecordReader<LongWritable, SimulatorSettingsWritable> {
@@ -62,22 +61,22 @@ public final class GridRecordReader extends RecordReader<LongWritable, Simulator
 		try {
 			final FromToPeriod period = new FromToPeriod("01-01-2013", "01-01-2014");
 			final SimulatorSettingsGridFactory factory = new SimulatorSettingsGridFactory(stockStorage, period);
-			fillFactory(period, factory);
+			fillFactory(factory);
 			return factory.getList();
 		} catch (ParseException | BadParameterException | BadAlgorithmException e) {
 			throw new IOException(e.getMessage());
 		}
 	}
 
-	private static void fillFactory(FromToPeriod period, SimulatorSettingsGridFactory settings) throws BadParameterException, BadAlgorithmException {
+	private static void fillFactory(SimulatorSettingsGridFactory settings) throws BadParameterException, BadAlgorithmException {
 		settings.addStock("in", algoStockName(Input.class.getSimpleName()), "e", Arrays.asList(new String[] { "open", "close" }));
 		settings.addStock("ema", algoStockName(Ema.class.getSimpleName()),
-				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("P", 0.1, 0.6, 0.5)).add(new MpSubExecution("", "in")));
+				new AlgorithmSettingsIteratorFactory().add(new MpDouble("P", 0.1, 0.6, 0.5)).add(new MpSubExecution("", "in")));
 		settings.addStock("level", algoStockName("." + Level.class.getSimpleName()),
-				new AlgorithmSettingsIteratorFactory(period).add(new MpDouble("f", 15.0, 20.0, 5)).add(new MpSubExecution("", Arrays.asList(new String[] { "ema" }))));
+				new AlgorithmSettingsIteratorFactory().add(new MpDouble("f", 15.0, 20.0, 5)).add(new MpSubExecution("", Arrays.asList(new String[] { "ema" }))));
 		settings.addEod("os", algoEodName(OneSideOpenAlgorithm.class.getSimpleName()), "side", Arrays.asList(new String[] { "long", "short" }));
 
-		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(period);
+		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory();
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "in", "level" })));
 		factoryPositionSide.add(new MpInteger("n", 1, 32, 32));
 		factoryPositionSide.add(new MpInteger("m", 1, 32, 32));

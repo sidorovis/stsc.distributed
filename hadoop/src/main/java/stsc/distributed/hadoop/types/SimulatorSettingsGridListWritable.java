@@ -24,8 +24,7 @@ import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 
 /**
- * This is implementation for {@link Writable} of
- * {@link SimulatorSettingsGridList}.
+ * This is implementation for {@link Writable} of {@link SimulatorSettingsGridList}.
  */
 public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 
@@ -157,7 +156,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		final String execName = strings.get(prefixExec);
 		final String algoName = strings.get(prefix + String.valueOf(index) + "." + ALGO_NAME);
 		final MultiAlgorithmParameters parameters = loadParameters(prefixExec);
-		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(period, false, parameters);
+		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(parameters);
 		return new GridExecutionInitializer(execName, algoName, paramsElement);
 	}
 

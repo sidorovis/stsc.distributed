@@ -202,8 +202,8 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 	}
 
 	private AlgorithmSettingsGeneticList loadAlgorithmSettings(String execPrefix) throws BadParameterException {
-		MultiAlgorithmParameters parameters = loadAlgorithmParameters(execPrefix);
-		return new AlgorithmSettingsGeneticList(period, parameters);
+		final MultiAlgorithmParameters parameters = loadAlgorithmParameters(execPrefix);
+		return new AlgorithmSettingsGeneticList(parameters);
 	}
 
 	private MultiAlgorithmParameters loadAlgorithmParameters(String execPrefix) throws BadParameterException {
@@ -259,7 +259,8 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	private void loadIntegerType(String execPrefix, MultiAlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadIntegerType(String execPrefix, MultiAlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix)
+			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);
@@ -273,7 +274,8 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	private void loadDoubleType(String execPrefix, MultiAlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix) throws BadParameterException {
+	private void loadDoubleType(String execPrefix, MultiAlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix)
+			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + namePostfix + String.valueOf(index);
