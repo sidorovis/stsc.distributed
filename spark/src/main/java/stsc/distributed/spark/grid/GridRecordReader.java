@@ -14,8 +14,8 @@ import stsc.common.FromToPeriod;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.common.types.SimulatorSettingsExternalizable;
-import stsc.general.simulator.SimulatorSettings;
-import stsc.general.simulator.SimulatorSettingsImpl;
+import stsc.general.simulator.SimulatorConfiguration;
+import stsc.general.simulator.SimulatorConfigurationImpl;
 import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
@@ -27,7 +27,7 @@ import stsc.storage.AlgorithmsStorage;
 import stsc.storage.mocks.StockStorageMock;
 
 /**
- * This is {@link SimulatorSettingsImpl} generator / creator for the Spark Mapper (Initial Input).
+ * This is {@link SimulatorConfigurationImpl} generator / creator for the Spark Mapper (Initial Input).
  */
 public final class GridRecordReader {
 
@@ -37,7 +37,7 @@ public final class GridRecordReader {
 	public Iterable<SimulatorSettingsExternalizable> getGridList() throws IOException {
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		final ArrayList<SimulatorSettingsExternalizable> result = new ArrayList<>();
-		for (SimulatorSettings ss : getDefaultSimulatorSettingsGridList(stockStorage)) {
+		for (SimulatorConfiguration ss : getDefaultSimulatorSettingsGridList(stockStorage)) {
 			result.add(new SimulatorSettingsExternalizable(ss));
 		}
 		return result;

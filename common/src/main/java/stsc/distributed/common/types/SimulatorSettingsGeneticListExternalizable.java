@@ -8,7 +8,8 @@ import java.util.Map;
 
 import stsc.common.FromToPeriod;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.multistarter.MultiAlgorithmParameters;
+import stsc.general.simulator.multistarter.AlgorithmConfigurationSet;
+import stsc.general.simulator.multistarter.AlgorithmConfigurationSetImpl;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
@@ -17,7 +18,7 @@ import stsc.general.simulator.multistarter.MpString;
 import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
-import stsc.general.simulator.multistarter.genetic.AlgorithmSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.AlgorithmConfigurationSetGeneticGenerator;
 import stsc.general.simulator.multistarter.genetic.ExternalizableGeneticList;
 import stsc.general.simulator.multistarter.genetic.GeneticExecutionInitializer;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
@@ -95,12 +96,12 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		saveAlgorithmSettings(execPrefix, initializer.geneticAlgorithmSettings);
 	}
 
-	private void saveAlgorithmSettings(String execPrefix, AlgorithmSettingsGeneticList settings) {
-		saveParameters(execPrefix, settings.getParameters());
+	private void saveAlgorithmSettings(String execPrefix, AlgorithmConfigurationSetGeneticGenerator geneticGenerator) {
+		saveParameters(execPrefix, geneticGenerator.getParameters());
 
 	}
 
-	private void saveParameters(String execPrefix, MultiAlgorithmParameters parameters) {
+	private void saveParameters(String execPrefix, AlgorithmConfigurationSet parameters) {
 		saveIntegers(execPrefix, parameters.getIntegers());
 		saveDoubles(execPrefix, parameters.getDoubles());
 		saveStrings(execPrefix, parameters.getStrings());
@@ -197,17 +198,16 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		final String execPrefix = initPrefix + EXECUTION_NAME + ".";
 		final String executionName = strings.get(execPrefix);
 		final String algorithmName = strings.get(initPrefix + ALGORITHM_NAME);
-		final AlgorithmSettingsGeneticList list = loadAlgorithmSettings(execPrefix);
+		final AlgorithmConfigurationSetGeneticGenerator list = loadAlgorithmSettings(execPrefix);
 		return new GeneticExecutionInitializer(executionName, algorithmName, list);
 	}
 
-	private AlgorithmSettingsGeneticList loadAlgorithmSettings(String execPrefix) throws BadParameterException {
-		final MultiAlgorithmParameters parameters = loadAlgorithmParameters(execPrefix);
-		return new AlgorithmSettingsGeneticList(parameters);
+	private AlgorithmConfigurationSetGeneticGenerator loadAlgorithmSettings(String execPrefix) throws BadParameterException {
+		return new AlgorithmConfigurationSetGeneticGenerator(loadAlgorithmParameters(execPrefix));
 	}
 
-	private MultiAlgorithmParameters loadAlgorithmParameters(String execPrefix) throws BadParameterException {
-		final MultiAlgorithmParameters result = new MultiAlgorithmParameters();
+	private AlgorithmConfigurationSetImpl loadAlgorithmParameters(String execPrefix) throws BadParameterException {
+		final AlgorithmConfigurationSetImpl result = new AlgorithmConfigurationSetImpl();
 		loadIntegers(result, execPrefix);
 		loadDoubles(result, execPrefix);
 		loadStrings(result, execPrefix);
@@ -215,15 +215,15 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		return result;
 	}
 
-	private void loadIntegers(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadIntegers(AlgorithmConfigurationSetImpl result, String execPrefix) throws BadParameterException {
 		loadIntegerType(execPrefix, result, integers, INTEGERS_SIZE, INTEGER_NAME);
 	}
 
-	private void loadDoubles(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadDoubles(AlgorithmConfigurationSetImpl result, String execPrefix) throws BadParameterException {
 		loadDoubleType(execPrefix, result, doubles, DOUBLES_SIZE, DOUBLE_NAME);
 	}
 
-	private void loadStrings(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadStrings(AlgorithmConfigurationSetImpl result, String execPrefix) throws BadParameterException {
 		final int size = integers.get(execPrefix + STRINGS_SIZE);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + STRING_NAME + "." + String.valueOf(index);
@@ -241,7 +241,7 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	private void loadSubExecutions(MultiAlgorithmParameters result, String execPrefix) throws BadParameterException {
+	private void loadSubExecutions(AlgorithmConfigurationSetImpl result, String execPrefix) throws BadParameterException {
 		final int size = integers.get(execPrefix + SUB_EXECUTIONS_SIZE);
 		for (int index = 0; index < size; ++index) {
 			final String prefix = execPrefix + SUB_EXECUTION_NAME + "." + String.valueOf(index);
@@ -259,7 +259,7 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	private void loadIntegerType(String execPrefix, MultiAlgorithmParameters result, Map<String, Integer> params, String sizePostfix, String namePostfix)
+	private void loadIntegerType(String execPrefix, AlgorithmConfigurationSetImpl result, Map<String, Integer> params, String sizePostfix, String namePostfix)
 			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {
@@ -274,7 +274,7 @@ public final class SimulatorSettingsGeneticListExternalizable extends MapEasyExt
 		}
 	}
 
-	private void loadDoubleType(String execPrefix, MultiAlgorithmParameters result, Map<String, Double> params, String sizePostfix, String namePostfix)
+	private void loadDoubleType(String execPrefix, AlgorithmConfigurationSetImpl result, Map<String, Double> params, String sizePostfix, String namePostfix)
 			throws BadParameterException {
 		final int size = integers.get(execPrefix + sizePostfix);
 		for (int index = 0; index < size; ++index) {

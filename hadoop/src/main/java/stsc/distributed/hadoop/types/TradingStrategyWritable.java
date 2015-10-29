@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
 
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorConfiguration;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
@@ -34,7 +34,7 @@ public final class TradingStrategyWritable implements Writable {
 
 	@Override
 	public void write(DataOutput out) throws IOException {
-		final SimulatorSettings settings = tradingStrategy.getSettings();
+		final SimulatorConfiguration settings = tradingStrategy.getSettings();
 		final Metrics metrics = tradingStrategy.getMetrics();
 		final SimulatorSettingsWritable ssw = new SimulatorSettingsWritable(settings);
 		ssw.write(out);

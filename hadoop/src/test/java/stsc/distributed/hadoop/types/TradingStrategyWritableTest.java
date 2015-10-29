@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import stsc.common.Settings;
 import stsc.common.algorithms.BadAlgorithmException;
-import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorConfiguration;
 import stsc.general.simulator.multistarter.genetic.GeneticList;
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
@@ -21,7 +21,7 @@ import stsc.storage.mocks.StockStorageMock;
 
 public class TradingStrategyWritableTest {
 
-	private SimulatorSettings getSettings() throws BadAlgorithmException {
+	private SimulatorConfiguration getSettings() throws BadAlgorithmException {
 		final GeneticList list = TestGeneticSimulatorSettings.getGeneticList();
 		return list.generateRandom();
 	}

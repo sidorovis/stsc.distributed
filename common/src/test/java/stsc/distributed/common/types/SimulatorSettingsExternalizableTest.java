@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import stsc.common.algorithms.BadAlgorithmException;
-import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorConfiguration;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
@@ -24,7 +24,7 @@ public class SimulatorSettingsExternalizableTest {
 			final PipedInputStream input = new PipedInputStream(100000);
 			final PipedOutputStream output = new PipedOutputStream(input);
 
-			final SimulatorSettings ss = list.generateRandom();
+			final SimulatorConfiguration ss = list.generateRandom();
 			final SimulatorSettingsExternalizable hss = new SimulatorSettingsExternalizable(ss);
 
 			final ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
@@ -35,7 +35,7 @@ public class SimulatorSettingsExternalizableTest {
 			hssCopy.readExternal(new ObjectInputStream(input));
 			input.close();
 
-			final SimulatorSettings settingsCopy = hssCopy.getSimulatorSettings(list.getStockStorage());
+			final SimulatorConfiguration settingsCopy = hssCopy.getSimulatorSettings(list.getStockStorage());
 			Assert.assertEquals(ss.stringHashCode(), settingsCopy.stringHashCode());
 		}
 	}

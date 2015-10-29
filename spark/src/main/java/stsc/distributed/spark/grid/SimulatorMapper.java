@@ -9,7 +9,7 @@ import stsc.distributed.common.types.SimulatorSettingsExternalizable;
 import stsc.distributed.common.types.TradingStrategyExternalizable;
 import stsc.general.simulator.Simulator;
 import stsc.general.simulator.SimulatorImpl;
-import stsc.general.simulator.SimulatorSettingsImpl;
+import stsc.general.simulator.SimulatorConfigurationImpl;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 import stsc.storage.mocks.StockStorageMock;
@@ -25,7 +25,7 @@ public final class SimulatorMapper implements Function<SimulatorSettingsExternal
 	public TradingStrategyExternalizable call(final SimulatorSettingsExternalizable settings) throws Exception {
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		try {
-			final SimulatorSettingsImpl simulatorSettings = settings.getSimulatorSettings(stockStorage);
+			final SimulatorConfigurationImpl simulatorSettings = settings.getSimulatorSettings(stockStorage);
 			final Simulator simulator = new SimulatorImpl();
 			simulator.simulateMarketTrading(simulatorSettings);
 			final Metrics metrics = simulator.getMetrics();

@@ -7,7 +7,8 @@ import java.util.Map;
 
 import stsc.common.FromToPeriod;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.multistarter.MultiAlgorithmParameters;
+import stsc.general.simulator.multistarter.AlgorithmConfigurationSet;
+import stsc.general.simulator.multistarter.AlgorithmConfigurationSetImpl;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
 import stsc.general.simulator.multistarter.MpInteger;
@@ -71,7 +72,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		saveParameters(prefixExec, initializer.iterator.getParameters());
 	}
 
-	private void saveParameters(String prefix, MultiAlgorithmParameters parameters) {
+	private void saveParameters(String prefix, AlgorithmConfigurationSet parameters) {
 		saveIntegers(prefix + ".integer.", parameters.getIntegers(), integers);
 		saveDoubles(prefix + ".double.", parameters.getDoubles(), doubles);
 		saveStrings(prefix + ".string.", parameters.getStrings(), strings);
@@ -154,13 +155,13 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		final String prefixExec = createExecPrefix(prefix, index);
 		final String execName = strings.get(prefixExec);
 		final String algoName = strings.get(prefix + String.valueOf(index) + "." + ALGO_NAME);
-		final MultiAlgorithmParameters parameters = loadParameters(prefixExec);
+		final AlgorithmConfigurationSet parameters = loadParameters(prefixExec);
 		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(parameters);
 		return new GridExecutionInitializer(execName, algoName, paramsElement);
 	}
 
-	private MultiAlgorithmParameters loadParameters(String prefixExec) throws BadParameterException {
-		final MultiAlgorithmParameters result = new MultiAlgorithmParameters();
+	private AlgorithmConfigurationSet loadParameters(String prefixExec) throws BadParameterException {
+		final AlgorithmConfigurationSetImpl result = new AlgorithmConfigurationSetImpl();
 		loadIntegers(result, prefixExec + ".integer.");
 		loadDoubles(result, prefixExec + ".double.");
 		loadStrings(result, prefixExec + ".string.");
@@ -168,7 +169,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		return result;
 	}
 
-	private void loadIntegers(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadIntegers(AlgorithmConfigurationSetImpl result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String indexPrefix = prefix + String.valueOf(i);
@@ -180,7 +181,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		}
 	}
 
-	private void loadDoubles(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadDoubles(AlgorithmConfigurationSetImpl result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String indexPrefix = prefix + String.valueOf(i);
@@ -192,7 +193,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		}
 	}
 
-	private void loadStrings(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadStrings(AlgorithmConfigurationSetImpl result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String dp = prefix + String.valueOf(i) + ".";
@@ -207,7 +208,7 @@ public final class SimulatorSettingsGridListExternalizable extends MapEasyExtern
 		}
 	}
 
-	private void loadSubExecutions(MultiAlgorithmParameters result, String prefix) throws BadParameterException {
+	private void loadSubExecutions(AlgorithmConfigurationSetImpl result, String prefix) throws BadParameterException {
 		final int size = integers.get(prefix + "size");
 		for (int i = 0; i < size; ++i) {
 			final String dp = prefix + String.valueOf(i) + ".";

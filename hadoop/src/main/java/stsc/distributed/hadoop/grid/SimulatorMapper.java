@@ -13,7 +13,7 @@ import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
 import stsc.distributed.hadoop.types.TradingStrategyWritable;
 import stsc.general.simulator.Simulator;
 import stsc.general.simulator.SimulatorImpl;
-import stsc.general.simulator.SimulatorSettingsImpl;
+import stsc.general.simulator.SimulatorConfigurationImpl;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
@@ -49,7 +49,7 @@ public final class SimulatorMapper extends Mapper<LongWritable, SimulatorSetting
 	protected void map(LongWritable key, SimulatorSettingsWritable value, Context context) throws java.io.IOException, InterruptedException {
 		final StockStorage stockStorage = hadoopYahooStockStorage.getStockStorage(context.getConfiguration());
 		try {
-			final SimulatorSettingsImpl settings = value.getSimulatorSettings(stockStorage);
+			final SimulatorConfigurationImpl settings = value.getSimulatorSettings(stockStorage);
 			final Simulator simulator = new SimulatorImpl();
 			simulator.simulateMarketTrading(settings);
 			final Metrics metrics = simulator.getMetrics();
