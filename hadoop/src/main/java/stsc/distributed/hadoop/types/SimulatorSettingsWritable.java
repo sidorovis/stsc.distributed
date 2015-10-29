@@ -8,12 +8,12 @@ import java.util.Map.Entry;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
-import stsc.algorithms.AlgorithmSettingsImpl;
+import stsc.algorithms.AlgorithmConfigurationImpl;
 import stsc.common.FromToPeriod;
-import stsc.common.algorithms.AlgorithmSettings;
+import stsc.common.algorithms.AlgorithmConfiguration;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.algorithms.EodExecution;
-import stsc.common.algorithms.MutatingAlgorithmSettings;
+import stsc.common.algorithms.MutatingAlgorithmConfiguration;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
@@ -117,7 +117,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmSettings settings) {
+	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmConfiguration settings) {
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
 		saveIntegers(settings, algoSettingsPrefix);
 		saveDoubles(settings, algoSettingsPrefix);
@@ -125,19 +125,19 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		saveSubExecutions(settings, algoSettingsPrefix);
 	}
 
-	private void saveIntegers(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveIntegers(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
 	}
 
-	private void saveDoubles(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveDoubles(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
 	}
 
-	private void saveStrings(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveStrings(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
 	}
 
-	private void saveSubExecutions(AlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveSubExecutions(AlgorithmConfiguration settings, String algoSettingsPrefix) {
 		final List<String> originalSubExecutions = settings.getSubExecutions();
 		integers.put(algoSettingsPrefix + SUB_EXECUTIONS_SIZE, originalSubExecutions.size());
 		long index = 0;
@@ -201,7 +201,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		final String executionName = strings.get(prefix + STOCK_EXECUTION_NAME);
 		final String algorithmName = strings.get(prefix + STOCK_ALGORITHM_NAME);
 
-		final AlgorithmSettingsImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
+		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
 		return new StockExecution(executionName, algorithmName, algorithmSettings);
 	}
 
@@ -214,13 +214,13 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		final String executionName = strings.get(prefix + EOD_EXECUTION_NAME);
 		final String algorithmName = strings.get(prefix + EOD_ALGORITHM_NAME);
 
-		final AlgorithmSettingsImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
+		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
 		return new EodExecution(executionName, algorithmName, algorithmSettings);
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	private AlgorithmSettingsImpl loadAlgorithmSettings(String executionName, String prefix) {
-		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl();
+	private AlgorithmConfigurationImpl loadAlgorithmSettings(String executionName, String prefix) {
+		final AlgorithmConfigurationImpl algorithmSettings = new AlgorithmConfigurationImpl();
 		// algoSettingsPrefix = "StockExecutions_54.ExecutionName";
 		// algoSettingsPrefix = "EodExecutions_76.TheUserDefinedName";
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
@@ -231,7 +231,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		return algorithmSettings;
 	}
 
-	private void loadIntegers(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadIntegers(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + INTEGERS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + INTEGER_NAME + String.valueOf(i);
@@ -241,7 +241,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private void loadDoubles(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadDoubles(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + DOUBLES_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + DOUBLE_NAME + String.valueOf(i);
@@ -251,7 +251,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private void loadStrings(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadStrings(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + STRINGS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + STRING_NAME + String.valueOf(i);
@@ -261,7 +261,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		}
 	}
 
-	private void loadSubExecutions(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadSubExecutions(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + SUB_EXECUTIONS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + SUB_EXECUTION_NAME + String.valueOf(i);

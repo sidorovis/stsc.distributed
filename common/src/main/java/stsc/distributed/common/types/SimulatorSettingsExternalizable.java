@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import stsc.algorithms.AlgorithmSettingsImpl;
+import stsc.algorithms.AlgorithmConfigurationImpl;
 import stsc.common.FromToPeriod;
-import stsc.common.algorithms.AlgorithmSettings;
+import stsc.common.algorithms.AlgorithmConfiguration;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.algorithms.EodExecution;
-import stsc.common.algorithms.MutatingAlgorithmSettings;
+import stsc.common.algorithms.MutatingAlgorithmConfiguration;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
@@ -115,7 +115,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmSettings settings) {
+	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmConfiguration settings) {
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
 		saveIntegers(settings, algoSettingsPrefix);
 		saveDoubles(settings, algoSettingsPrefix);
@@ -123,19 +123,19 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		saveSubExecutions(settings, algoSettingsPrefix);
 	}
 
-	private void saveIntegers(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveIntegers(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
 	}
 
-	private void saveDoubles(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveDoubles(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
 	}
 
-	private void saveStrings(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveStrings(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
 	}
 
-	private void saveSubExecutions(AlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveSubExecutions(AlgorithmConfiguration settings, String algoSettingsPrefix) {
 		final List<String> originalSubExecutions = settings.getSubExecutions();
 		integers.put(algoSettingsPrefix + SUB_EXECUTIONS_SIZE, originalSubExecutions.size());
 		long index = 0;
@@ -147,7 +147,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		}
 	}
 
-	private <T> void saveTypes(AlgorithmSettings settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
+	private <T> void saveTypes(AlgorithmConfiguration settings, String algoSettingsPrefix, Map<String, T> from, String sizePostfix, String fieldNamePostFix, Map<String, T> to) {
 		integers.put(algoSettingsPrefix + sizePostfix, from.size());
 		long index = 0;
 		for (Entry<String, T> i : from.entrySet()) {
@@ -199,7 +199,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		final String executionName = strings.get(prefix + STOCK_EXECUTION_NAME);
 		final String algorithmName = strings.get(prefix + STOCK_ALGORITHM_NAME);
 
-		final AlgorithmSettingsImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
+		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
 		return new StockExecution(executionName, algorithmName, algorithmSettings);
 	}
 
@@ -212,13 +212,13 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		final String executionName = strings.get(prefix + EOD_EXECUTION_NAME);
 		final String algorithmName = strings.get(prefix + EOD_ALGORITHM_NAME);
 
-		final AlgorithmSettingsImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
+		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
 		return new EodExecution(executionName, algorithmName, algorithmSettings);
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	private AlgorithmSettingsImpl loadAlgorithmSettings(String executionName, String prefix) {
-		final AlgorithmSettingsImpl algorithmSettings = new AlgorithmSettingsImpl();
+	private AlgorithmConfigurationImpl loadAlgorithmSettings(String executionName, String prefix) {
+		final AlgorithmConfigurationImpl algorithmSettings = new AlgorithmConfigurationImpl();
 		// algoSettingsPrefix = "StockExecutions_54.ExecutionName";
 		// algoSettingsPrefix = "EodExecutions_76.TheUserDefinedName";
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
@@ -229,7 +229,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		return algorithmSettings;
 	}
 
-	private void loadIntegers(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadIntegers(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + INTEGERS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + INTEGER_NAME + String.valueOf(i);
@@ -239,7 +239,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		}
 	}
 
-	private void loadDoubles(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadDoubles(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + DOUBLES_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + DOUBLE_NAME + String.valueOf(i);
@@ -249,7 +249,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		}
 	}
 
-	private void loadStrings(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadStrings(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + STRINGS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + STRING_NAME + String.valueOf(i);
@@ -259,7 +259,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		}
 	}
 
-	private void loadSubExecutions(AlgorithmSettingsImpl algorithmSettings, String algoSettingsPrefix) {
+	private void loadSubExecutions(AlgorithmConfigurationImpl algorithmSettings, String algoSettingsPrefix) {
 		final long algoSettingsSize = integers.get(algoSettingsPrefix + SUB_EXECUTIONS_SIZE);
 		for (long i = 0; i < algoSettingsSize; ++i) {
 			final String parameterPrefix = algoSettingsPrefix + SUB_EXECUTION_NAME + String.valueOf(i);
