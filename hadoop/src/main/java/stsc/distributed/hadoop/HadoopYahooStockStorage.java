@@ -9,7 +9,7 @@ import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
 
-import stsc.common.stocks.UnitedFormatStock;
+import stsc.common.stocks.united.format.UnitedFormatStock;
 import stsc.common.storage.StockStorage;
 import stsc.storage.ThreadSafeStockStorage;
 
