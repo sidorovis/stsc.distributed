@@ -13,6 +13,7 @@ import stsc.common.FromToPeriod;
 import stsc.common.algorithms.AlgorithmSettings;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.algorithms.EodExecution;
+import stsc.common.algorithms.MutatingAlgorithmSettings;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
@@ -116,7 +117,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveAlgorithmSettings(String prefix, String executionName, AlgorithmSettings settings) {
+	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmSettings settings) {
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
 		saveIntegers(settings, algoSettingsPrefix);
 		saveDoubles(settings, algoSettingsPrefix);
@@ -124,15 +125,15 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		saveSubExecutions(settings, algoSettingsPrefix);
 	}
 
-	private void saveIntegers(AlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveIntegers(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
 	}
 
-	private void saveDoubles(AlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveDoubles(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
 	}
 
-	private void saveStrings(AlgorithmSettings settings, String algoSettingsPrefix) {
+	private void saveStrings(MutatingAlgorithmSettings settings, String algoSettingsPrefix) {
 		saveTypes(algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
 	}
 
