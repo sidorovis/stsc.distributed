@@ -9,7 +9,7 @@ import stsc.common.FromToPeriod;
 import stsc.common.algorithms.AlgorithmConfiguration;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.algorithms.EodExecution;
-import stsc.common.algorithms.MutatingAlgorithmConfiguration;
+import stsc.common.algorithms.MutableAlgorithmConfiguration;
 import stsc.common.algorithms.StockExecution;
 import stsc.common.storage.StockStorage;
 import stsc.general.algorithm.AlgorithmConfigurationImpl;
@@ -115,7 +115,7 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveAlgorithmSettings(String prefix, String executionName, MutatingAlgorithmConfiguration settings) {
+	private void saveAlgorithmSettings(String prefix, String executionName, MutableAlgorithmConfiguration settings) {
 		final String algoSettingsPrefix = generateAlgoSettingsPrefix(executionName, prefix);
 		saveIntegers(settings, algoSettingsPrefix);
 		saveDoubles(settings, algoSettingsPrefix);
@@ -123,15 +123,15 @@ public final class SimulatorSettingsExternalizable extends MapEasyExternalizable
 		saveSubExecutions(settings, algoSettingsPrefix);
 	}
 
-	private void saveIntegers(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
+	private void saveIntegers(MutableAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getIntegers(), INTEGERS_SIZE, INTEGER_NAME, integers);
 	}
 
-	private void saveDoubles(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
+	private void saveDoubles(MutableAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getDoubles(), DOUBLES_SIZE, DOUBLE_NAME, doubles);
 	}
 
-	private void saveStrings(MutatingAlgorithmConfiguration settings, String algoSettingsPrefix) {
+	private void saveStrings(MutableAlgorithmConfiguration settings, String algoSettingsPrefix) {
 		saveTypes(settings, algoSettingsPrefix, settings.getStrings(), STRINGS_SIZE, STRING_NAME, strings);
 	}
 
