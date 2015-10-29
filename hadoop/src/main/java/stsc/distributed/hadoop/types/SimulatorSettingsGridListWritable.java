@@ -19,7 +19,7 @@ import stsc.general.simulator.multistarter.MpString;
 import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.MpTextIterator;
 import stsc.general.simulator.multistarter.ParameterList;
-import stsc.general.simulator.multistarter.grid.AlgorithmSettingsGridIterator;
+import stsc.general.simulator.multistarter.grid.AlgorithmConfigurationSetGridGenerator;
 import stsc.general.simulator.multistarter.grid.GridExecutionInitializer;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
@@ -157,7 +157,7 @@ public final class SimulatorSettingsGridListWritable extends MapEasyWritable {
 		final String execName = strings.get(prefixExec);
 		final String algoName = strings.get(prefix + String.valueOf(index) + "." + ALGO_NAME);
 		final AlgorithmConfigurationSet parameters = loadParameters(prefixExec);
-		AlgorithmSettingsGridIterator paramsElement = new AlgorithmSettingsGridIterator(parameters);
+		AlgorithmConfigurationSetGridGenerator paramsElement = new AlgorithmConfigurationSetGridGenerator(parameters);
 		return new GridExecutionInitializer(execName, algoName, paramsElement);
 	}
 
