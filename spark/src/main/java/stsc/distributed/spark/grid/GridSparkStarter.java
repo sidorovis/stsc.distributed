@@ -30,8 +30,8 @@ public final class GridSparkStarter {
 		cf.addParameter(MetricType.avLoss, -1.0);
 		cf.addParameter(MetricType.avWin, 1.0);
 		cf.addParameter(MetricType.startMonthAvGain, 1.2);
-		cf.addParameter(MetricType.ddDurationAvGain, -1.2);
-		cf.addParameter(MetricType.ddValueAvGain, -1.2);
+		cf.addParameter(MetricType.ddDurationAverage, -1.2);
+		cf.addParameter(MetricType.ddValueAverage, -1.2);
 		return cf;
 	}
 
