@@ -48,7 +48,7 @@ public final class GridSparkStarter {
 
 		final SparkConf sparkConf = new SparkConf(). //
 				setAppName(GridSparkStarter.class.getSimpleName()). //
-				setMaster("local");
+				setMaster("local[4]");
 		final JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
 
 		final ArrayList<SimulatorSettingsExternalizable> simulatorSettingsList = new ArrayList<>();
