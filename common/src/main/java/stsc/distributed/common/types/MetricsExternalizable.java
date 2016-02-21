@@ -1,9 +1,11 @@
 package stsc.distributed.common.types;
 
 import java.io.Externalizable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import stsc.general.statistic.EquityCurve;
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 
@@ -14,9 +16,11 @@ public final class MetricsExternalizable extends MapEasyExternalizable {
 
 	private static String DOUBLE_SIZE = "sizeDouble";
 	private static String INTEGER_SIZE = "sizeInteger";
+	private static String EQUITY_VALUE_SIZE = "sizeEquityValue";
 
 	public MetricsExternalizable(final Metrics metrics) {
 		saveStatistics(metrics);
+		saveEquityCurve(metrics);
 	}
 
 	public MetricsExternalizable() {
@@ -41,6 +45,16 @@ public final class MetricsExternalizable extends MapEasyExternalizable {
 		}
 	}
 
+	private void saveEquityCurve(Metrics metrics) {
+		integers.put(EQUITY_VALUE_SIZE, metrics.getEquityCurveInMoney().size());
+		for (int i = 0 ; i < metrics.getEquityCurveInMoney().size() ; ++i) {
+			final String parName = generateEquityCurveParameterName(i);
+			longs.put(parName, metrics.getEquityCurveInMoney().get(i).date.getTime());
+			doubles.put(parName, metrics.getEquityCurveInMoney().get(i).value);
+		}
+	}
+
+	
 	public Metrics getMetrics() {
 		return loadStatistics();
 	}
@@ -58,7 +72,15 @@ public final class MetricsExternalizable extends MapEasyExternalizable {
 			final String parName = generateIntegerParameterName(i);
 			integerValues.put(MetricType.valueOf(strings.get(parName)), integers.get(parName));
 		}
-		return new Metrics(doubleValues, integerValues);
+		final int sizeEquityCurve = integers.get(EQUITY_VALUE_SIZE);
+		final EquityCurve equityCurve = new EquityCurve();
+		for (int i = 0 ; i < sizeEquityCurve ; ++i) {
+			final String parName = generateEquityCurveParameterName(i);
+			final Date date = new Date(longs.get(parName));
+			final double value = doubles.get(parName);
+			equityCurve.add(date, value);
+		}
+		return new Metrics(doubleValues, integerValues, equityCurve);
 	}
 
 	private String generateDoubleParameterName(final int index) {
@@ -67,5 +89,10 @@ public final class MetricsExternalizable extends MapEasyExternalizable {
 
 	private String generateIntegerParameterName(final int index) {
 		return "methodInteger." + String.valueOf(index);
+	}
+	
+
+	private String generateEquityCurveParameterName(final int index) {
+		return "equityCurve." + String.valueOf(index);
 	}
 }
