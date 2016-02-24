@@ -11,15 +11,15 @@ import org.apache.hadoop.io.WritableComparable;
 import stsc.common.FromToPeriod;
 import stsc.common.algorithms.AlgorithmConfiguration;
 import stsc.common.algorithms.BadAlgorithmException;
-import stsc.common.algorithms.EodExecution;
+import stsc.common.algorithms.EodExecutionInstance;
 import stsc.common.algorithms.MutableAlgorithmConfiguration;
-import stsc.common.algorithms.StockExecution;
+import stsc.common.algorithms.StockExecutionInstance;
 import stsc.common.storage.StockStorage;
 import stsc.general.algorithm.AlgorithmConfigurationImpl;
 import stsc.general.simulator.SimulatorConfiguration;
 import stsc.general.simulator.SimulatorConfigurationImpl;
 import stsc.general.trading.TradeProcessorInit;
-import stsc.storage.ExecutionsStorage;
+import stsc.storage.ExecutionInstancesStorage;
 
 /**
  * This is implementation for {@link Writable} of {@link SimulatorConfigurationImpl}.
@@ -81,25 +81,25 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveExecutionsStorage(ExecutionsStorage executionsStorage) {
-		final List<StockExecution> stockExecutions = executionsStorage.getStockExecutions();
+	private void saveExecutionsStorage(ExecutionInstancesStorage executionsStorage) {
+		final List<StockExecutionInstance> stockExecutions = executionsStorage.getStockExecutions();
 		integers.put(STOCK_EXECUTION_SIZE, stockExecutions.size());
 		long stockIndex = 0;
-		for (StockExecution stockExecution : stockExecutions) {
+		for (StockExecutionInstance stockExecution : stockExecutions) {
 			saveStockExecution(stockExecution, stockIndex);
 			stockIndex += 1;
 		}
-		final List<EodExecution> eodExecutions = executionsStorage.getEodExecutions();
+		final List<EodExecutionInstance> eodExecutions = executionsStorage.getEodExecutions();
 		integers.put(EOD_EXECUTION_SIZE, eodExecutions.size());
 		long eodIndex = 0;
-		for (EodExecution eodExecution : eodExecutions) {
+		for (EodExecutionInstance eodExecution : eodExecutions) {
 			saveEodExecution(eodExecution, eodIndex);
 			eodIndex += 1;
 		}
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveStockExecution(StockExecution stockExecution, long stockIndex) {
+	private void saveStockExecution(StockExecutionInstance stockExecution, long stockIndex) {
 		final String prefix = generateStockPrefix(stockIndex);
 		final String executionName = stockExecution.getExecutionName();
 		strings.put(prefix + STOCK_EXECUTION_NAME, executionName);
@@ -108,7 +108,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettings -> SimulatorSettingsWritable
-	private void saveEodExecution(EodExecution eodExecution, long stockIndex) {
+	private void saveEodExecution(EodExecutionInstance eodExecution, long stockIndex) {
 		final String prefix = generateEodPrefix(stockIndex);
 		final String executionName = eodExecution.getExecutionName();
 		strings.put(prefix + EOD_EXECUTION_NAME, executionName);
@@ -181,7 +181,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	private void loadExecutionStorage(ExecutionsStorage executionsStorage) throws BadAlgorithmException {
+	private void loadExecutionStorage(ExecutionInstancesStorage executionsStorage) throws BadAlgorithmException {
 		final long stockExecutionsSize = integers.get(STOCK_EXECUTION_SIZE);
 		for (long i = 0; i < stockExecutionsSize; ++i) {
 			executionsStorage.addStockExecution(loadStockExecution(i));
@@ -193,7 +193,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	private StockExecution loadStockExecution(long index) throws BadAlgorithmException {
+	private StockExecutionInstance loadStockExecution(long index) throws BadAlgorithmException {
 		// prefix = "StockExecutions_1"
 		// prefix = "StockExecutions_24"
 		// prefix = "StockExecutions_523"
@@ -202,11 +202,11 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		final String algorithmName = strings.get(prefix + STOCK_ALGORITHM_NAME);
 
 		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
-		return new StockExecution(executionName, algorithmName, algorithmSettings);
+		return new StockExecutionInstance(executionName, algorithmName, algorithmSettings);
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
-	private EodExecution loadEodExecution(long index) throws BadAlgorithmException {
+	private EodExecutionInstance loadEodExecution(long index) throws BadAlgorithmException {
 		// prefix = "EodExecutions_1"
 		// prefix = "EodExecutions_24"
 		// prefix = "EodExecutions_523"
@@ -215,7 +215,7 @@ public final class SimulatorSettingsWritable extends MapEasyWritable implements 
 		final String algorithmName = strings.get(prefix + EOD_ALGORITHM_NAME);
 
 		final AlgorithmConfigurationImpl algorithmSettings = loadAlgorithmSettings(executionName, prefix);
-		return new EodExecution(executionName, algorithmName, algorithmSettings);
+		return new EodExecutionInstance(executionName, algorithmName, algorithmSettings);
 	}
 
 	// SimulatorSettingsWritable -> SimulatorSettings
