@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import stsc.algorithms.Input;
 import stsc.algorithms.indices.primitive.stock.Ema;
@@ -34,7 +35,7 @@ public final class GridRecordReader {
 	public GridRecordReader() {
 	}
 
-	public Iterable<SimulatorSettingsExternalizable> getGridList() throws IOException {
+	public List<SimulatorSettingsExternalizable> getGridList() throws IOException {
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		final ArrayList<SimulatorSettingsExternalizable> result = new ArrayList<>();
 		for (SimulatorConfiguration ss : getDefaultSimulatorSettingsGridList(stockStorage)) {

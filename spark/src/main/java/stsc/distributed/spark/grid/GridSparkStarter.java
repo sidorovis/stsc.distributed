@@ -1,7 +1,6 @@
 package stsc.distributed.spark.grid;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
@@ -44,18 +43,14 @@ public final class GridSparkStarter {
 		return searchOnSpark(new GridRecordReader().getGridList());
 	}
 
-	public List<TradingStrategy> searchOnSpark(Iterable<SimulatorSettingsExternalizable> ssList) throws BadAlgorithmException {
+	public List<TradingStrategy> searchOnSpark(List<SimulatorSettingsExternalizable> ssList) throws BadAlgorithmException {
 
 		final SparkConf sparkConf = new SparkConf(). //
 				setAppName(GridSparkStarter.class.getSimpleName()). //
 				setMaster("local[4]");
 		final JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
 
-		final ArrayList<SimulatorSettingsExternalizable> simulatorSettingsList = new ArrayList<>();
-		for (SimulatorSettingsExternalizable ss : ssList) {
-			simulatorSettingsList.add(ss);
-		}
-		final JavaRDD<SimulatorSettingsExternalizable> simulatorSettings = javaSparkContext.parallelize(simulatorSettingsList);
+		final JavaRDD<SimulatorSettingsExternalizable> simulatorSettings = javaSparkContext.parallelize(ssList);
 		final JavaRDD<TradingStrategyExternalizable> allTradingStrategies = simulatorSettings.map(new SimulatorMapper());
 
 		List<TradingStrategyExternalizable> allmostRes = allTradingStrategies.collect();
