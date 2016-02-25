@@ -7,7 +7,7 @@ import java.io.ObjectOutput;
 
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.SimulatorConfiguration;
+import stsc.general.simulator.Execution;
 import stsc.general.statistic.Metrics;
 import stsc.general.strategy.TradingStrategy;
 
@@ -37,7 +37,7 @@ public final class TradingStrategyExternalizable implements Externalizable {
 
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
-		final SimulatorConfiguration settings = tradingStrategy.getSettings();
+		final Execution settings = tradingStrategy.getSettings();
 		final Metrics metrics = tradingStrategy.getMetrics();
 		final SimulatorSettingsExternalizable ssw = new SimulatorSettingsExternalizable(settings);
 		ssw.writeExternal(out);

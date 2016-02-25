@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import stsc.common.algorithms.BadAlgorithmException;
-import stsc.general.simulator.SimulatorConfiguration;
+import stsc.general.simulator.Execution;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.testhelper.TestGeneticSimulatorSettings;
 
@@ -22,7 +22,7 @@ public class SimulatorSettingsWritableTest {
 			final DataOutputByteBuffer output = new DataOutputByteBuffer();
 			final DataInputByteBuffer input = new DataInputByteBuffer();
 
-			final SimulatorConfiguration ss = list.generateRandom();
+			final Execution ss = list.generateRandom();
 			final SimulatorSettingsWritable hss = new SimulatorSettingsWritable(ss);
 
 			hss.write(output);
@@ -31,7 +31,7 @@ public class SimulatorSettingsWritableTest {
 			final SimulatorSettingsWritable hssCopy = new SimulatorSettingsWritable();
 			hssCopy.readFields(input);
 
-			final SimulatorConfiguration settingsCopy = hssCopy.getSimulatorSettings(list.getStockStorage());
+			final Execution settingsCopy = hssCopy.getSimulatorSettings(list.getStockStorage());
 			Assert.assertEquals(ss.stringHashCode(), settingsCopy.stringHashCode());
 		}
 	}

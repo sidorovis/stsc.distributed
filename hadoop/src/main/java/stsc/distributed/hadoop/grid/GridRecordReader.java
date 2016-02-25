@@ -21,8 +21,8 @@ import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.distributed.hadoop.HadoopYahooStockStorage;
 import stsc.distributed.hadoop.types.SimulatorSettingsWritable;
-import stsc.general.simulator.SimulatorConfiguration;
-import stsc.general.simulator.SimulatorConfigurationImpl;
+import stsc.general.simulator.Execution;
+import stsc.general.simulator.ExecutionImpl;
 import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
 import stsc.general.simulator.multistarter.BadParameterException;
 import stsc.general.simulator.multistarter.MpDouble;
@@ -33,15 +33,15 @@ import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.storage.AlgorithmsStorage;
 
 /**
- * This actually only example how it is possible to create one layered distributed {@link SimulatorConfigurationImpl} (for Grid (brute-force) search). <br/>
+ * This actually only example how it is possible to create one layered distributed {@link ExecutionImpl} (for Grid (brute-force) search). <br/>
  * Simulator Settings are hard-coded.
  */
 public final class GridRecordReader extends RecordReader<LongWritable, SimulatorSettingsWritable> {
 
 	private long size;
 	private long id = 0;
-	private Iterator<SimulatorConfigurationImpl> iterator;
-	private SimulatorConfiguration current;
+	private Iterator<ExecutionImpl> iterator;
+	private Execution current;
 	private boolean finished;
 
 	public GridRecordReader(Configuration configuration) throws IOException {
@@ -110,7 +110,7 @@ public final class GridRecordReader extends RecordReader<LongWritable, Simulator
 	@Override
 	public SimulatorSettingsWritable getCurrentValue() throws IOException, InterruptedException {
 		if (iterator.hasNext()) {
-			final SimulatorConfiguration result = current;
+			final Execution result = current;
 			current = iterator.next();
 			id = current.getId();
 			return new SimulatorSettingsWritable(result);
