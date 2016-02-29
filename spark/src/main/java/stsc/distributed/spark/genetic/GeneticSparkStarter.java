@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -26,43 +27,60 @@ import stsc.general.strategy.selector.StrategySelector;
 import stsc.storage.mocks.StockStorageMock;
 
 /**
- * This is a default starter for genetic on spark search.
- * TODO finish me!
+ * This is a default starter for genetic on spark search. TODO finish me!
  */
 public final class GeneticSparkStarter {
 
+	private final String sparkMaster = "local[4]";
+	private final StrategySelector strategySelector = new StatisticsByCostSelector(150, generateDefaultCostFunction(), new MetricsDifferentComparator());
+
+	private final int initialGenerationSize = 100;
+	private final int minimalGenerationSize = 80;
+
 	public GeneticSparkStarter() {
+		Validate.isTrue(initialGenerationSize > minimalGenerationSize, "initialGenerationSize should be bigger then minimalGenerationSize");
 	}
 
 	public List<TradingStrategy> searchOnSpark() throws IOException, BadAlgorithmException {
-
 		final SparkConf sparkConf = new SparkConf(). //
 				setAppName(GridSparkStarter.class.getSimpleName()). //
-				setMaster("local[4]");
+				setMaster(sparkMaster);
 		final JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
 
 		final SimulatorSettingsGeneticListImpl geneticList = new GeneticRecordReader().generateSimulatorSettingsGeneticList(StockStorageMock.getStockStorage());
-		
-		List<SimulatorSettingsExternalizable> initialGeneration = createInitialGeneration(geneticList);
-		
-		final JavaRDD<SimulatorSettingsExternalizable> simulatorSettings = javaSparkContext.parallelize(initialGeneration);
-		final JavaRDD<TradingStrategyExternalizable> allTradingStrategies = simulatorSettings.map(new SimulatorMapper());
 
-		List<TradingStrategyExternalizable> allmostRes = allTradingStrategies.collect();
+		List<TradingStrategyExternalizable> initialGeneration = calculateInitialGeneration(javaSparkContext, geneticList);
+
 		javaSparkContext.close();
 
 		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 
-		final StrategySelector strategySelector = new StatisticsByCostSelector(150, generateDefaultCostFunction(), new MetricsDifferentComparator());
-		for (TradingStrategyExternalizable tsw : allmostRes) {
+		for (TradingStrategyExternalizable tsw : initialGeneration) {
 			strategySelector.addStrategy(tsw.getTradingStrategy(stockStorage));
 		}
+
 		return strategySelector.getStrategies();
 	}
 
-	private List<SimulatorSettingsExternalizable> createInitialGeneration(SimulatorSettingsGeneticListImpl geneticList) throws BadAlgorithmException {
+	private List<TradingStrategyExternalizable> calculateInitialGeneration(final JavaSparkContext javaSparkContext,
+			final SimulatorSettingsGeneticListImpl geneticList) throws BadAlgorithmException {
+
+		final List<TradingStrategyExternalizable> result = new ArrayList<>();
+
+		while (result.size() < minimalGenerationSize) {
+			final List<SimulatorSettingsExternalizable> initialGeneration = createInitialGeneration(geneticList, initialGenerationSize - result.size());
+			final JavaRDD<SimulatorSettingsExternalizable> simulatorSettings = javaSparkContext.parallelize(initialGeneration);
+			final JavaRDD<TradingStrategyExternalizable> allTradingStrategies = simulatorSettings.map(new SimulatorMapper());
+			final List<TradingStrategyExternalizable> initialPopulation = allTradingStrategies.collect();
+			result.addAll(initialPopulation);
+		}
+
+		return result;
+	}
+
+	private List<SimulatorSettingsExternalizable> createInitialGeneration(final SimulatorSettingsGeneticListImpl geneticList, int amountToGenerate) throws BadAlgorithmException {
 		final List<SimulatorSettingsExternalizable> result = new ArrayList<>();
-		for (int i = 0 ; i < 100 ; ++i) {
+		for (int i = 0; i < amountToGenerate; ++i) {
 			final ExecutionImpl generateRandom = geneticList.generateRandom();
 			result.add(new SimulatorSettingsExternalizable(generateRandom));
 		}
