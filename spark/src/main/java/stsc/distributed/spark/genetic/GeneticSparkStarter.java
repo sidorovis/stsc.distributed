@@ -31,11 +31,15 @@ import stsc.storage.mocks.StockStorageMock;
  */
 public final class GeneticSparkStarter {
 
+	final StockStorage stockStorage = StockStorageMock.getStockStorage();
 	private final String sparkMaster = "local[4]";
 	private final StrategySelector strategySelector = new StatisticsByCostSelector(150, generateDefaultCostFunction(), new MetricsDifferentComparator());
 
 	private final int initialGenerationSize = 100;
 	private final int minimalGenerationSize = 80;
+
+	private double maxPopulationCost = -Double.MAX_VALUE;
+	private int maxPopulationAmount = 100;
 
 	public GeneticSparkStarter() {
 		Validate.isTrue(initialGenerationSize > minimalGenerationSize, "initialGenerationSize should be bigger then minimalGenerationSize");
@@ -46,20 +50,28 @@ public final class GeneticSparkStarter {
 				setAppName(GridSparkStarter.class.getSimpleName()). //
 				setMaster(sparkMaster);
 		final JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
-
-		final SimulatorSettingsGeneticListImpl geneticList = new GeneticRecordReader().generateSimulatorSettingsGeneticList(StockStorageMock.getStockStorage());
-
-		List<TradingStrategyExternalizable> initialGeneration = calculateInitialGeneration(javaSparkContext, geneticList);
-
+		geneticSearch(javaSparkContext);
 		javaSparkContext.close();
-
-		final StockStorage stockStorage = StockStorageMock.getStockStorage();
-
-		for (TradingStrategyExternalizable tsw : initialGeneration) {
-			strategySelector.addStrategy(tsw.getTradingStrategy(stockStorage));
-		}
-
 		return strategySelector.getStrategies();
+	}
+
+	private void geneticSearch(final JavaSparkContext javaSparkContext) throws BadAlgorithmException, IOException {
+		final SimulatorSettingsGeneticListImpl geneticList = new GeneticRecordReader().generateSimulatorSettingsGeneticList(stockStorage);
+		List<TradingStrategyExternalizable> initialGeneration = calculateInitialGeneration(javaSparkContext, geneticList);
+		startGeneticIterations(initialGeneration);
+		// TODO delete me
+		// for (TradingStrategyExternalizable tsw : initialGeneration) {
+		// strategySelector.addStrategy(tsw.getTradingStrategy(stockStorage));
+		// }
+	}
+
+	private void startGeneticIterations(List<TradingStrategyExternalizable> initialGeneration) {
+		double lastCostSum = maxPopulationCost;
+		int currentIteration = 0;
+		while (currentIteration < maxPopulationAmount) {
+			
+			currentIteration += 1;
+		}
 	}
 
 	private List<TradingStrategyExternalizable> calculateInitialGeneration(final JavaSparkContext javaSparkContext,
@@ -78,7 +90,8 @@ public final class GeneticSparkStarter {
 		return result;
 	}
 
-	private List<SimulatorSettingsExternalizable> createInitialGeneration(final SimulatorSettingsGeneticListImpl geneticList, int amountToGenerate) throws BadAlgorithmException {
+	private List<SimulatorSettingsExternalizable> createInitialGeneration(final SimulatorSettingsGeneticListImpl geneticList, int amountToGenerate)
+			throws BadAlgorithmException {
 		final List<SimulatorSettingsExternalizable> result = new ArrayList<>();
 		for (int i = 0; i < amountToGenerate; ++i) {
 			final ExecutionImpl generateRandom = geneticList.generateRandom();
